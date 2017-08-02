@@ -24,3 +24,10 @@ app.use(session({secret: 'Corey-doesnt-know-what-this-does'}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+require('./config/passport')(passport);
+
+var routes = require('./config/routes');
+app.use(routes);
+
+app.listen(3000);
