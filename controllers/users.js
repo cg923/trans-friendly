@@ -18,12 +18,18 @@ function postSignup(request, response, next) {
 
 // GET /login
 function getLogin(request, response) {
-
+	response.render('login.ejs', { message: request.flash('loginMessage') });
 }
 
 // POIST /login
-function postLogin(request, response) {
+function postLogin(request, response, next) {
+	var loginProperty = passport.authenticate('local-login', {
+		successRedirect: '/',
+		failureRedirect: '/login',
+		failureFlash: true
+	});
 
+	return loginProperty(request, response, next);
 }
 
 // GET /logout

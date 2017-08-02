@@ -1,5 +1,8 @@
 <% include ./partials/header.ejs %>
 <h2>Login</h2>
+<% if (message.length > 0) { %>
+	<div class="alert alert-danger"><%= message %></div>
+<% } %>
 
 <form method="post" action="/login">
 	<div class="form-group">
