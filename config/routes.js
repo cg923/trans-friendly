@@ -27,7 +27,7 @@ router.route('/login')
 router.route('/logout')
 	.get(usersController.getLogout);
 
-router.route('/addreview')
+ router.route('/addreview')
 	.get(authenticatedUser, usersController.addReview);
 
 module.exports = router;
