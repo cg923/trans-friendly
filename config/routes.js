@@ -7,6 +7,12 @@ const usersController	= require('../controllers/users');
 const placesController	= require('../controllers/places');
 const staticsController	= require('../controllers/statics');
 
+function authenticatedUser(req, res, next) {
+	if(req.isAuthenticated()) return next;
+
+	res.redirect('/');
+}
+
 router.route('/')
 	.get(staticsController.home);
 
@@ -20,5 +26,8 @@ router.route('/login')
 
 router.route('/logout')
 	.get(usersController.getLogout);
+
+router.route('/addreview')
+	.get(authenticatedUser, usersController.addReview);
 
 module.exports = router;

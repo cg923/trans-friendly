@@ -34,7 +34,13 @@ function postLogin(request, response, next) {
 
 // GET /logout
 function getLogout(request, response) {
+	request.logout();
+	response.redirect('/');
+}
 
+// GET /addreview
+function addReview(request, response) {
+	// TO DO
 }
 
 module.exports = {
