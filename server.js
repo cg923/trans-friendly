@@ -8,7 +8,7 @@ const cookieParser	= require('cookie-parser');
 const bodyParser	= require('body-parser');
 const session		= require('express-session');
 
-mongoose.connect('mongod://localhost/transplaces');
+mongoose.connect('mongodb://localhost/transplaces');
 
 app.use(morgan('dev'));
 app.use(cookieParser());
@@ -16,7 +16,7 @@ app.use(bodyParser());
 
 app.use(express.static(__dirname + '/public'));
 
-app.set('views', './views');
+app.set('views', __dirname + '/public/views');
 app.engine('ejs', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 

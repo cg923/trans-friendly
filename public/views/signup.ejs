@@ -1,6 +1,10 @@
 <% include ./partials/header.ejs %>
 <h2>Sign Up</h2>
 
+<% if(message.length > 0) { %>
+	<div class="alert alert-danger"><%= message %></div>
+<% } %>
+
 <form method="post" action="/signup">
 	<div class="form-group">
 		<label for="email">E-mail</label>

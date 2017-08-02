@@ -9,7 +9,7 @@ var User = mongoose.Schema({
 });
 
 User.methods.hash = function(password) {
-	return bcrypt.hashSync(password, bcrypt.getSaltSync(8), null);
+	return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 module.exports = mongoose.model('User', User);
