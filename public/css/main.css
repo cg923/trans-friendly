@@ -2,11 +2,27 @@ body {
 	padding-top: 50px;
 }
 
+/* Bootstrap overrides */
 .navbar {
 	background: #74CDF4;
 }
 
+/* Page structure */
+.search {
+	min-height: 200px;
+}
+
+/* Google Maps */
 #map {
-	height: 400px;
+	height: 500px;
 	width: 100%;
+}
+
+/* Pure style, baby */
+.pink {
+	background: #ebadb9;
+}
+
+.blue {
+	background: #74cdf4;
 }
