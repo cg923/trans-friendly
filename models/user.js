@@ -5,7 +5,9 @@ var User = mongoose.Schema({
 	local: {
 		email: String,
 		password: String
-	}
+	},
+	reviews: [{type: mongoose.Schema.Types.ObjectId, ref: 'Review'}]
+
 });
 
 User.methods.hash = function(password) {

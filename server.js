@@ -8,7 +8,7 @@ const cookieParser	= require('cookie-parser');
 const bodyParser	= require('body-parser');
 const session		= require('express-session');
 
-mongoose.connect('mongodb://localhost/transplaces');
+//mongoose.connect('mongodb://localhost/transplaces');
 
 app.use(morgan('dev'));
 app.use(cookieParser());
