@@ -16,12 +16,10 @@ function newPlace(req, res, next) {
 	// Call Google Places API
 	request(url, function(error, response, body) {
 		if (error) throw error;
-		console.log(body);
-		//if (typeof(body) === 'string') { body = JSON.parse(body); }
+		if (typeof(body) === 'string') { body = JSON.parse(body); }
 
 		// Send results!
-		res.send('yo');
-		//res.json(body.results);
+		res.json(body.results);
 	});
 }
 

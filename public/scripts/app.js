@@ -1,6 +1,6 @@
 var map;
 var openInfoWindows = [];
-var makers = [];
+var markers = [];
 var radius;
 
 $(document).ready(function() {
@@ -58,9 +58,7 @@ function populateMap(searchTerm, location) {
       radius: radius
     },
     success: function(results) {
-    	console.log('yay!');
-    	console.log(results);
-      /*
+      
       // Remove active markers from the map.
       markers.forEach(function(element) {
         element.setMap(null);
@@ -70,7 +68,7 @@ function populateMap(searchTerm, location) {
       // Create markers for new results.
       results.forEach(function(element) {
         // Create corresponding infoWindows (Google's little popup bubbles)
-        createInfoWindow(element, function(infoWindow, results) {
+        //createInfoWindow(element, function(infoWindow, results) {
           var marker = new google.maps.Marker({
             position: {lat: element.geometry.location.lat, lng: element.geometry.location.lng},
             map: map,
@@ -84,8 +82,8 @@ function populateMap(searchTerm, location) {
             populateReviewList(results);
             infoWindow.open(map, marker);
           });
-        });
-      });*/
+        //});
+      });
     }
   });
 }
