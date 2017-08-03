@@ -27,13 +27,13 @@ function getPlaceFromGoogle(req, res, next) {
 // POST /api/places
 function getPlaceFromDb(req, res, next) {
 	if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);
-	db.Place.findOne({ 'name': req.body.search, 'location.lat': req.body.location.lat, 'location.lng': req.body.location.lng })
+	db.Place.Place.findOne({ 'name': req.body.search, 'location.lat': req.body.location.lat, 'location.lng': req.body.location.lng })
 	.exec(function(err, place) {
 		if (err) throw err;
 
 		// No place was found so we should create an entry
 		if (!place) {
-			var newPlace = new db.Place({
+			var newPlace = new db.Place.Place({
 				name: 					req.body.search,
 				friendliness: 			0,
 				friendlinessTotal: 		0,
@@ -58,7 +58,44 @@ function getPlaceFromDb(req, res, next) {
 	});
 }
 
+// PUT /api/places/:id
+function addReview(req, res, next) {
+	db.Place.Place.findOne({_id: req.params.id}, function(err, place) {
+		if(typeof(req.body) === 'string') req.body = JSON.parse(req.body);
+
+		console.log(req.body);
+
+		place.reviews.push({
+			author: req.body.author,
+			friendliness: req.body.friendliness,
+			genderNeutralBathrooms: req.body.genderNeutralBathrooms,
+			lgbtOwned: req.body.lgbtOwned,
+			advertises: req.body.advertises,
+			text: req.body.text
+		});
+
+		if(req.body.genderNeutralBathrooms) {
+			place.genderNeutralBathrooms = req.body.genderNeutralBathrooms;
+		}
+		if(req.body.lgbtOwned) { 
+			place.lgbtOwned = req.body.lgbtOwned; 
+		}
+		if(req.body.advertisesLgbtFriendly) { 
+			place.advertisesLgbtFriendly = req.body.advertisesLgbtFriendly; 
+		}
+
+		// Calculate new friendliness score.
+		place.friendlinessTotal += req.body.friendliness;
+		place.friendliness = place.friendlinessTotal / place.reviews.length;
+
+		place.save(function(err, move) {
+			res.json(place);
+		});
+	});
+}
+
 module.exports = {
 	getPlaceFromGoogle: getPlaceFromGoogle,
-	getPlaceFromDb: getPlaceFromDb
+	getPlaceFromDb: getPlaceFromDb,
+	addReview: addReview
 };

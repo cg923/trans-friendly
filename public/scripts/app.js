@@ -64,8 +64,9 @@ function createInfoWindow(place, callback) {
 	                "<table>" +
 	                "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
 	                "<tr><td width=200>LGBT Owned:</td><td><img src='" + lgbtOwned + "'></td></tr>" +
-	                "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table>" +
-	                "<a href='/api/places/review/" + result._id + "'>Write a review</a>"
+	                "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table><br>" +
+	                "<center><a href='/api/places/review/" + result._id + "'>Write a review</a></center>" +
+	                "<br>id: " + result._id
 			});
 
 			openInfoWindows.push(infoWindow);
@@ -76,7 +77,7 @@ function createInfoWindow(place, callback) {
 
 function closeOpenInfoWindows() {
 	// Hide reviews
-	//$('#reviews').addClass('hidden');
+	$('#reviews').addClass('hidden');
 
 	// Close info windows.
 	if (openInfoWindows.length === 0) return;
@@ -113,6 +114,45 @@ function calculateSearchRadius() {
 	}
 }
 
+function populateReviewList(place) {
+	// Clear existing reviews.
+	var reviewList = $('#review-list');
+	reviewList.html('');
+
+	// Make reviews visible
+	$('#reviews').removeClass('hidden');
+
+	// Create bootstrap panel to represent review
+	place.reviews.forEach(function(element, index) {
+
+	    var row = $('<div></div>');
+	    row.addClass("row");
+
+	    var outerDiv = $('<div></div>');
+	    outerDiv.addClass("panel");
+	    outerDiv.addClass("panel-default");
+	    outerDiv.addClass("col-lg-10");
+	    outerDiv.addClass("col-lg-offset-1")
+
+	    var innerDiv = $('<div></div>');
+	    innerDiv.addClass("panel-body");
+	    innerDiv.html(place.reviews[index].text);
+
+	    if(index % 2 === 0) { 
+	      	innerDiv.addClass('pink'); 
+	      	outerDiv.addClass('pink');
+	    }
+	    else { 
+	      	innerDiv.addClass('blue');
+	      	outerDiv.addClass('blue')
+	    }
+
+	    outerDiv.append(innerDiv);
+	    row.append(outerDiv);
+	    reviewList.append(row);
+  	});
+}
+
 function populateMap(searchTerm, location) {
   
     var radius = calculateSearchRadius();
@@ -136,6 +176,8 @@ function populateMap(searchTerm, location) {
 	        });
 	        markers = [];
 
+	        console.log(results);
+
 	        // Create markers for new results.
 	        results.forEach(function(element) {
 	        	// Create corresponding infoWindows (Google's little popup bubbles)
@@ -150,7 +192,7 @@ function populateMap(searchTerm, location) {
 		            // When user clicks on a marker, display the corresponding infoWindow.
 		            marker.addListener('click', function() {
 		            	closeOpenInfoWindows();
-		            	//populateReviewList(results);
+		            	populateReviewList(results);
 		            	infoWindow.open(map, marker);
 		            });
 	        	});

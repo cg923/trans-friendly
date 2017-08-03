@@ -41,4 +41,6 @@ router.route('/api/places/search')
 	// See above ^
 	.post(placesController.getPlaceFromDb);
 
+router.route('/api/places/:id')
+	.put(placesController.addReview);
 module.exports = router;

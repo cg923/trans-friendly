@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 var Review = mongoose.Schema({
-	author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+	author: String,
 	friendliness: Number,
 	genderNeutralBathrooms: Boolean,
 	lgbtOwned: Boolean,
