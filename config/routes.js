@@ -13,9 +13,11 @@ function authenticatedUser(req, res, next) {
 	res.redirect('/');
 }
 
+// STATICS
 router.route('/')
 	.get(staticsController.home);
 
+// USERS
 router.route('/signup')
 	.get(usersController.getSignup)
 	.post(usersController.postSignup);
@@ -30,4 +32,8 @@ router.route('/logout')
  router.route('/addreview')
 	.get(authenticatedUser, usersController.addReview);
 
+// PLACES
+router.route('/api/google')
+	.post(placesController.newPlace);
+	
 module.exports = router;
