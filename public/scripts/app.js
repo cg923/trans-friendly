@@ -10,13 +10,28 @@ $(document).ready(function() {
 });
 
 function createInfoWindow(place, callback) {
-	//Check our DB to see if we have data on the place.
 	var reviews = [];
 	var friendliness;
 	var friendImgSrc = '';
 	var genNeutBath = '/img/check_false.png';
 	var lgbtOwned = '/img/check_false.png';
 	var advertises = '/img/check_false.png';
+
+	// Check our database to see if we have info about this place.
+	$.ajax({
+		url: '/api/places/search',
+		method: "POST",
+		data: {
+			'search': place.name,
+			'location': {
+				'lat': place.geometry.location.lat,
+				'lng': place.geometry.location.lng
+			}
+		},
+		success: function(result) {
+			console.log(result);
+		}
+	});
 
 	var infoWindow = new google.maps.InfoWindow({
 		content: "Hi!"

@@ -34,6 +34,10 @@ router.route('/logout')
 
 // PLACES
 router.route('/api/google')
-	.post(placesController.newPlace);
-	
+	// This is POST because we need to pass data.
+	.post(placesController.getPlaceFromGoogle);
+
+router.route('/api/places/search')
+	.post(placesController.getPlaceFromDb);
+
 module.exports = router;
