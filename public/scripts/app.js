@@ -29,16 +29,49 @@ function createInfoWindow(place, callback) {
 			}
 		},
 		success: function(result) {
-			console.log(result);
+			if (result.genderNeutralBathrooms) { genNeutBath = 'img/check_true.png'; }
+			if (result.lgbtOwned) { lgbtOwned = '/img/check_false.png'; }
+			if (result.advertises) { advertises = '/img/check_false.png'; }
+
+			// Set rating image according to friendliness
+			switch (Math.floor(result.friendliness)) {
+				case 0:
+          			friendImgSrc = "No ratings";
+          			break;
+		        case 1:
+			          friendImgSrc = "<img src='img/1star.png'>";
+			          break;
+		        case 2:
+			          friendImgSrc = "<img src='img/2star.png'>";
+			          break;
+		        case 3:
+			          friendImgSrc = "<img src='img/3star.png'>";
+			          break;
+		        case 4:
+			          friendImgSrc = "<img src='img/4star.png'>";
+			          break;
+		        case 5:
+			          friendImgSrc = "<img src='img/5star.png'>";
+			          break;
+		        default:
+			          throw console.log('invalid friendliness rating!');
+      		}
+
+      		var infoWindow = new google.maps.InfoWindow({
+				content: "<b>" + place.name + "</b><br>" + 
+	                place.vicinity + "<br><br>" + 
+	                friendImgSrc + "<br><br>" + 
+	                "<table>" +
+	                "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
+	                "<tr><td width=200>LGBT Owned:</td><td><img src='" + lgbtOwned + "'></td></tr>" +
+	                "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table>" +
+	                "<a href='/api/places/review/" + result._id + "'>Write a review</a>"
+			});
+
+			openInfoWindows.push(infoWindow);
+			callback(infoWindow, result);
 		}
 	});
-
-	var infoWindow = new google.maps.InfoWindow({
-		content: "Hi!"
-	});
-
-	openInfoWindows.push(infoWindow);
-	callback(infoWindow, null);
 }
 
 function closeOpenInfoWindows() {

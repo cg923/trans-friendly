@@ -10,6 +10,7 @@ var Place = mongoose.Schema({
 	friendlinessTotal: Number,
 	genderNeutralBathrooms: Boolean,
 	lgbtOwned: Boolean,
+	// Advertises as LGBT friendly.
 	advertises: Boolean,
 	reviews: [{type: mongoose.Schema.Types.ObjectId, ref: 'Review'}]
 });
