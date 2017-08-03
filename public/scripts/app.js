@@ -65,9 +65,15 @@ function createInfoWindow(place, callback) {
 	                "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
 	                "<tr><td width=200>LGBT Owned:</td><td><img src='" + lgbtOwned + "'></td></tr>" +
 	                "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table><br>" +
-	                "<center><a href='/api/places/review/" + result._id + "'>Write a review</a></center>" +
+	                "<center><button class='btn btn-default add-review'>Write a review</button></center>" +
 	                "<br>id: " + result._id
 			});
+
+      		google.maps.event.addListener(infoWindow, 'domready', function() {
+      			$('.add-review').click(function() {
+      				$('#review-modal').modal();
+      			});
+      		});
 
 			openInfoWindows.push(infoWindow);
 			callback(infoWindow, result);
@@ -175,8 +181,6 @@ function populateMap(searchTerm, location) {
 	        	element.setMap(null);
 	        });
 	        markers = [];
-
-	        console.log(results);
 
 	        // Create markers for new results.
 	        results.forEach(function(element) {
