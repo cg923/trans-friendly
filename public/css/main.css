@@ -1,11 +1,12 @@
+body {
+	padding-top: 50px;
+}
+
 .navbar {
 	background: #74CDF4;
 }
 
-.navbar-default {
-	color: white;
-}
-
-.navbar-fixed-top {
-	color: white;
+#map {
+	height: 400px;
+	width: 100%;
 }
