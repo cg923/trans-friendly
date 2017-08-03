@@ -59,6 +59,7 @@ function populateMap(searchTerm, location) {
     },
     success: function(results) {
     	console.log('yay!');
+    	console.log(results);
       /*
       // Remove active markers from the map.
       markers.forEach(function(element) {
