@@ -38,6 +38,7 @@ router.route('/api/google')
 	.post(placesController.getPlaceFromGoogle);
 
 router.route('/api/places/search')
+	// See above ^
 	.post(placesController.getPlaceFromDb);
 
 module.exports = router;

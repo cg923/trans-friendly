@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
 
+var Review = mongoose.Schema({
+	author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+	friendliness: Number,
+	genderNeutralBathrooms: Boolean,
+	lgbtOwned: Boolean,
+	advertises: Boolean,
+	text: String
+});
+
 var Place = mongoose.Schema({
 	name: String,
 	location: {
@@ -12,7 +21,8 @@ var Place = mongoose.Schema({
 	lgbtOwned: Boolean,
 	// Advertises as LGBT friendly.
 	advertises: Boolean,
-	reviews: [{type: mongoose.Schema.Types.ObjectId, ref: 'Review'}]
+	reviews: [Review]
 });
 
-module.exports = mongoose.model('Place', Place);
+module.exports.Place = mongoose.model('Place', Place);
+module.exports.Review = mongoose.model('Review', Review);
