@@ -10,7 +10,7 @@ const staticsController	= require('../controllers/statics');
 function authenticatedUser(req, res, next) {
 	if(req.isAuthenticated()) return next;
 
-	res.redirect('/');
+	res.redirect('/login');
 }
 
 // STATICS
@@ -42,5 +42,6 @@ router.route('/api/places/search')
 	.post(placesController.getPlaceFromDb);
 
 router.route('/api/places/:id')
-	.put(placesController.addReview);
+	.put(authenticatedUser, placesController.addReview);
+
 module.exports = router;

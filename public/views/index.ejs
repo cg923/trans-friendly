@@ -46,16 +46,58 @@
 </div>
 
 <!-- ADD REVIEW MODAL -->
-<div id="review-modal" class="modal fade" role="dialog">
+<div id="review-modal" class="modal fade" role="dialog" data-place-id="" data-place-name="">
 	<div class="modal-dialog">
 	<!-- Modal Content -->
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismis="modal">&times;</button>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Leave a Review</h4>
 			</div>
 			<div class="modal-body">
-				<p>FORM</p>
+				<div class="form-group">
+					<h2 id="modal-form-title"></h2>
+					<textarea row="5" class="form-control" id="review-text" placeholder="E.g. Alyssa was totally welcoming when I asked for a woman's haircut!"></textarea>
+				</div>
+				<!-- Gender neutral bathrooms -->
+				<div class="form-check">
+					<h4>Do they provide gender neutral bathrooms?</h4>
+					<label class="form-check-label">
+						<input class="form-check-input" type="radio" name="gendNeutBath" id="gendNeutBathYes" value="yes">
+						Yes
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="radio" name="gendNeutBath" id="gendNeutBathNo" value="no">
+						No
+					</label>
+				</div>
+				<!-- LGBT owned -->
+				<div class="form-check">
+					<h4>Is the owner a member of the LGBTQI+ community?</h4>
+					<label class="form-check-label">
+						<input class="form-check-input" type="radio" name="lgbtOwned" id="lgbtOwnedYes" value="yes">
+						Yes
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="radio" name="lgbtOwned" id="lgbtOwnedNo" value="no">
+						No
+					</label>
+				</div>
+				<!-- Advertises as LGBT friendly -->
+				<div class="form-check">
+					<h4>Do they advertise as being LGBTQI+ friendly?</h4>
+					<label class="form-check-label">
+						<input class="form-check-input" type="radio" name="advertises" id="advertisesYes" value="yes">
+						Yes
+					</label>
+					<label class="form-check-label">
+						<input class="form-check-input" type="radio" name="advertises" id="advertisesNo" value="no">
+						No
+					</label>
+				</div>
+				<div class="submit">
+					<button type="submit" class="btn btn-default">Submit</button>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

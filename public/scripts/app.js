@@ -71,6 +71,8 @@ function createInfoWindow(place, callback) {
 
       		google.maps.event.addListener(infoWindow, 'domready', function() {
       			$('.add-review').click(function() {
+      				$('#review-modal').data('place-id', result._id);
+      				$('#modal-form-title').html('What do you think of ' + place.name + '?');
       				$('#review-modal').modal();
       			});
       		});

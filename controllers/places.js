@@ -60,14 +60,9 @@ function getPlaceFromDb(req, res, next) {
 
 // PUT /api/places/:id
 function addReview(req, res, next) {
-	// User should not be able to leave a review
-	// unless they're logged in.
-	if(!req.user) return;
-	
+
 	db.Place.Place.findOne({_id: req.params.id}, function(err, place) {
 		if(typeof(req.body) === 'string') req.body = JSON.parse(req.body);
-
-		console.log(req.body);
 
 		place.reviews.push({
 			author: req.body.author,
