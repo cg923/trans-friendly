@@ -10,58 +10,61 @@ $(document).ready(function() {
 
 	$('#add-review-form').submit(function(event) {
 		event.preventDefault();
-
-		let reviewText = $('#review-text').val();
-
-		let genderNeutralBathrooms;
-		if ($('input[name=gendNeutBath]:checked', '#add-review-form').val() === 'yes') {
-			genderNeutralBathrooms = true;
-		} else { 
-			genderNeutralBathrooms = false; 
-		}
-
-		let lgbtOwned;
-		if ($('input[name=lgbtOwned]:checked', '#add-review-form').val() === 'yes') {
-			lgbtOwned = true;
-		} else { 
-			lgbtOwned = false; 
-		}
-
-		let advertises;
-		if ($('input[name=advertises]:checked', '#add-review-form').val() === 'yes') {
-			advertises = true;
-		} else { 
-			advertises = false; 
-		}
-
-		let friendliness = parseInt($('#friendliness').val());
-		let url = '/api/places/' + $('#review-modal').data('place-id');
-
-		console.log($('#review-modal').data('place-id'));
-		$.ajax({
-			method: "PUT",
-			url: url,
-			data: {
-				'friendliness': friendliness,
-				'genderNeutralBathrooms': genderNeutralBathrooms,
-				'lgbtOwned': lgbtOwned,
-				'advertises': advertises,
-				'text': reviewText
-			},
-			success: function(result) {
-				$('#review-modal').modal('toggle');
-			}
-		});
+		addReview();
 	});
 });
 
+function updateInfoWindow(place) {
+	let friendliness;
+	let friendImgSrc = '';
+	let genNeutBath = '/img/check_false.png';
+	let lgbtOwned = '/img/check_false.png';
+	let advertises = '/img/check_false.png';
+
+	if (place.genderNeutralBathrooms) { genNeutBath = 'img/check_true.png'; }
+	if (place.lgbtOwned) { lgbtOwned = '/img/check_false.png'; }
+	if (place.advertises) { advertises = '/img/check_false.png'; }
+
+	// Set rating image according to friendliness
+	if (place.reviews.length === 0) { friendliness = 0; }
+	else { friendliness = Math.floor(place.friendliness / place.reviews.length) };
+	switch (friendliness) {
+		case 0:
+  			friendImgSrc = "No ratings";
+  			break;
+        case 1:
+	          friendImgSrc = "<img src='img/1star.png'>";
+	          break;
+        case 2:
+	          friendImgSrc = "<img src='img/2star.png'>";
+	          break;
+        case 3:
+	          friendImgSrc = "<img src='img/3star.png'>";
+	          break;
+        case 4:
+	          friendImgSrc = "<img src='img/4star.png'>";
+	          break;
+        case 5:
+	          friendImgSrc = "<img src='img/5star.png'>";
+	          break;
+        default:
+	          throw console.log('invalid friendliness rating: ' + place.friendliness);
+	}
+
+	let content= "<b>" + place.name + "</b><br>" + 
+        place.vicinity + "<br><br>" + 
+        "<center>" + friendImgSrc + "</center><br>" +
+        "<center>" + place.reviews.length + " reviews</center><br>" +  
+        "<table>" +
+        "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
+        "<tr><td width=200>LGBT Owned:</td><td><img src='" + lgbtOwned + "'></td></tr>" +
+        "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table><br>" +
+        "<center><button class='btn btn-default add-review'>Write a review</button></center>";
+
+    return content;
+}
+
 function createInfoWindow(place, callback) {
-	var reviews = [];
-	var friendliness;
-	var friendImgSrc = '';
-	var genNeutBath = '/img/check_false.png';
-	var lgbtOwned = '/img/check_false.png';
-	var advertises = '/img/check_false.png';
 
 	// Check our database to see if we have info about this place.
 	$.ajax({
@@ -75,47 +78,8 @@ function createInfoWindow(place, callback) {
 			}
 		},
 		success: function(result) {
-			if (result.genderNeutralBathrooms) { genNeutBath = 'img/check_true.png'; }
-			if (result.lgbtOwned) { lgbtOwned = '/img/check_false.png'; }
-			if (result.advertises) { advertises = '/img/check_false.png'; }
-
-			// Set rating image according to friendliness
-			let friendliness;
-			if (result.reviews.length === 0) { friendliness = 0; }
-			else { friendliness = Math.floor(result.friendliness / result.reviews.length) };
-			switch (friendliness) {
-				case 0:
-          			friendImgSrc = "No ratings";
-          			break;
-		        case 1:
-			          friendImgSrc = "<img src='img/1star.png'>";
-			          break;
-		        case 2:
-			          friendImgSrc = "<img src='img/2star.png'>";
-			          break;
-		        case 3:
-			          friendImgSrc = "<img src='img/3star.png'>";
-			          break;
-		        case 4:
-			          friendImgSrc = "<img src='img/4star.png'>";
-			          break;
-		        case 5:
-			          friendImgSrc = "<img src='img/5star.png'>";
-			          break;
-		        default:
-			          throw console.log('invalid friendliness rating: ' + result.friendliness);
-      		}
-
-      		var infoWindow = new google.maps.InfoWindow({
-				content: "<b>" + place.name + "</b><br>" + 
-	                place.vicinity + "<br><br>" + 
-	                "<center>" + friendImgSrc + "</center><br>" +
-	                "<center>" + result.reviews.length + " reviews</center><br>" +  
-	                "<table>" +
-	                "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
-	                "<tr><td width=200>LGBT Owned:</td><td><img src='" + lgbtOwned + "'></td></tr>" +
-	                "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table><br>" +
-	                "<center><button class='btn btn-default add-review'>Write a review</button></center>"
+			var infoWindow = new google.maps.InfoWindow({
+				content: updateInfoWindow(result)
 			});
 
       		google.maps.event.addListener(infoWindow, 'domready', function() {
@@ -126,7 +90,6 @@ function createInfoWindow(place, callback) {
       			});
       		});
 
-			openInfoWindows.push(infoWindow);
 			callback(infoWindow, result);
 		}
 	});
@@ -144,31 +107,49 @@ function closeOpenInfoWindows() {
 	});
 }
 
-function calculateSearchRadius() {
-	// Calculate an appropriate search radius.
-  	// TO DO - This should be an equation.
-	switch (map.getZoom()) {
-	    case 20:
-		    return 50;
-	    case 19:
-		    return 75;
-	    case 18:
-		    return 100;
-	    case 17:
-		    return 250;
-	    case 16:
-		    return 500;
-	    case 15:
-		    return 750;
-	    case 14:
-		    return 3250;
-	    case 13:
-		    return 5500;
-	    case 12:
-		    return 7750;
-	    default:
-		    return 10000;
+function addReview() {
+	let reviewText = $('#review-text').val();
+
+	let genderNeutralBathrooms;
+	if ($('input[name=gendNeutBath]:checked', '#add-review-form').val() === 'yes') {
+		genderNeutralBathrooms = true;
+	} else { 
+		genderNeutralBathrooms = false; 
 	}
+
+	let lgbtOwned;
+	if ($('input[name=lgbtOwned]:checked', '#add-review-form').val() === 'yes') {
+		lgbtOwned = true;
+	} else { 
+		lgbtOwned = false; 
+	}
+
+	let advertises;
+	if ($('input[name=advertises]:checked', '#add-review-form').val() === 'yes') {
+		advertises = true;
+	} else { 
+		advertises = false; 
+	}
+
+	let friendliness = parseInt($('#friendliness').val());
+	let url = '/api/places/' + $('#review-modal').data('place-id');
+
+	$.ajax({
+		method: "PUT",
+		url: url,
+		data: {
+			'friendliness': friendliness,
+			'genderNeutralBathrooms': genderNeutralBathrooms,
+			'lgbtOwned': lgbtOwned,
+			'advertises': advertises,
+			'text': reviewText
+		},
+		success: function(result) {
+			$('#review-modal').modal('toggle');
+			populateReviewList(result);
+			openInfoWindows[0].setContent(updateInfoWindow(result));
+		}
+	});
 }
 
 function populateReviewList(place) {
@@ -210,6 +191,33 @@ function populateReviewList(place) {
   	});
 }
 
+function calculateSearchRadius() {
+	// Calculate an appropriate search radius.
+  	// TO DO - This should be an equation.
+	switch (map.getZoom()) {
+	    case 20:
+		    return 50;
+	    case 19:
+		    return 75;
+	    case 18:
+		    return 100;
+	    case 17:
+		    return 250;
+	    case 16:
+		    return 500;
+	    case 15:
+		    return 750;
+	    case 14:
+		    return 3250;
+	    case 13:
+		    return 5500;
+	    case 12:
+		    return 7750;
+	    default:
+		    return 10000;
+	}
+} 
+
 function populateMap(searchTerm, location) {
   
     var radius = calculateSearchRadius();
@@ -248,8 +256,8 @@ function populateMap(searchTerm, location) {
 		            marker.addListener('click', function() {
 		            	closeOpenInfoWindows();
 		            	populateReviewList(results);
-		       			createInfoWindow(element);
 		            	infoWindow.open(map, marker);
+		            	openInfoWindows.push(infoWindow);
 		            });
 	        	});
 	    	});
