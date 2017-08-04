@@ -78,7 +78,7 @@ function createInfoWindow(place, callback) {
 
 	// Check our database to see if we have info about this place.
 	$.ajax({
-		url: '/api/places/search',
+		url: '/api/places/',
 		method: "POST",
 		data: {
 			'search': place.name,

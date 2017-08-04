@@ -8,10 +8,8 @@ const placesController	= require('../controllers/places');
 const staticsController	= require('../controllers/statics');
 
 function authenticatedUser(req, res, next) {
-	console.log('yo');
 	if(req.isAuthenticated()) return next();
 
-	console.log('wasnt authenticated :(');
 	res.redirect('/');
 }
 
@@ -36,10 +34,17 @@ router.route('/api/google')
 	// This is POST because we need to pass data.
 	.post(placesController.getPlaceFromGoogle);
 
-router.route('/api/places/search')
-	// See above ^
-	.post(placesController.getPlaceFromDb);
+// index
 
+// show
+
+// create
+router.route('/api/places/')
+	.post(placesController.createOrGetPlaceFromDb);
+
+// delete
+
+// update
 router.route('/api/places/:id')
 	.put(authenticatedUser, placesController.addReview);
 

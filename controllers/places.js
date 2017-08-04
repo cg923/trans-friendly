@@ -13,8 +13,6 @@ function getPlaceFromGoogle(req, res, next) {
 				'&radius=' + req.body.radius + 
 				'&key=' + env.key;
 
-	console.log(url);
-
 	// Call Google Places API
 	request(url, function(error, response, body) {
 		if (error) throw error;
@@ -25,8 +23,8 @@ function getPlaceFromGoogle(req, res, next) {
 	});
 }
 
-// POST /api/places
-function getPlaceFromDb(req, res, next) {
+// POST /api/places/
+function createOrGetPlaceFromDb(req, res, next) {
 	if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);
 	db.Place.Place.findOne({ 'name': req.body.search, 'location.lat': req.body.location.lat, 'location.lng': req.body.location.lng })
 	.exec(function(err, place) {
@@ -96,6 +94,6 @@ function addReview(req, res, next) {
 
 module.exports = {
 	getPlaceFromGoogle: getPlaceFromGoogle,
-	getPlaceFromDb: getPlaceFromDb,
+	createOrGetPlaceFromDb: createOrGetPlaceFromDb,
 	addReview: addReview
 };
