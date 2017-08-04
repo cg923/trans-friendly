@@ -8,9 +8,11 @@ const placesController	= require('../controllers/places');
 const staticsController	= require('../controllers/statics');
 
 function authenticatedUser(req, res, next) {
-	if(req.isAuthenticated()) return next;
+	console.log('yo');
+	if(req.isAuthenticated()) return next();
 
-	res.redirect('/login');
+	console.log('wasnt authenticated :(');
+	res.redirect('/');
 }
 
 // STATICS
@@ -28,9 +30,6 @@ router.route('/login')
 
 router.route('/logout')
 	.get(usersController.getLogout);
-
- router.route('/addreview')
-	.get(authenticatedUser, usersController.addReview);
 
 // PLACES
 router.route('/api/google')

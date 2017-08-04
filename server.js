@@ -8,8 +8,6 @@ const cookieParser	= require('cookie-parser');
 const bodyParser	= require('body-parser');
 const session		= require('express-session');
 
-//mongoose.connect('mongodb://localhost/transplaces');
-
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser());
@@ -20,7 +18,10 @@ app.set('views', __dirname + '/public/views');
 app.engine('ejs', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 
-app.use(session({secret: 'Corey-doesnt-know-what-this-does'}));
+app.use(session({
+	secret: 'WDI-GENERAL-ASSEMBLY-EXPRESS',
+
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());

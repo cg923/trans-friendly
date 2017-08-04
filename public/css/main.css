@@ -12,6 +12,10 @@ body {
 	min-height: 200px;
 }
 
+select {
+	min-height: 40px;
+}
+
 /* Google Maps */
 #map {
 	height: 500px;

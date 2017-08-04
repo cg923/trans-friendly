@@ -55,49 +55,66 @@
 				<h4 class="modal-title">Leave a Review</h4>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
-					<h2 id="modal-form-title"></h2>
-					<textarea row="5" class="form-control" id="review-text" placeholder="E.g. Alyssa was totally welcoming when I asked for a woman's haircut!"></textarea>
-				</div>
-				<!-- Gender neutral bathrooms -->
-				<div class="form-check">
-					<h4>Do they provide gender neutral bathrooms?</h4>
-					<label class="form-check-label">
-						<input class="form-check-input" type="radio" name="gendNeutBath" id="gendNeutBathYes" value="yes">
-						Yes
-					</label>
-					<label class="form-check-label">
-						<input class="form-check-input" type="radio" name="gendNeutBath" id="gendNeutBathNo" value="no">
-						No
-					</label>
-				</div>
-				<!-- LGBT owned -->
-				<div class="form-check">
-					<h4>Is the owner a member of the LGBTQI+ community?</h4>
-					<label class="form-check-label">
-						<input class="form-check-input" type="radio" name="lgbtOwned" id="lgbtOwnedYes" value="yes">
-						Yes
-					</label>
-					<label class="form-check-label">
-						<input class="form-check-input" type="radio" name="lgbtOwned" id="lgbtOwnedNo" value="no">
-						No
-					</label>
-				</div>
-				<!-- Advertises as LGBT friendly -->
-				<div class="form-check">
-					<h4>Do they advertise as being LGBTQI+ friendly?</h4>
-					<label class="form-check-label">
-						<input class="form-check-input" type="radio" name="advertises" id="advertisesYes" value="yes">
-						Yes
-					</label>
-					<label class="form-check-label">
-						<input class="form-check-input" type="radio" name="advertises" id="advertisesNo" value="no">
-						No
-					</label>
-				</div>
-				<div class="submit">
-					<button type="submit" class="btn btn-default">Submit</button>
-				</div>
+				<form id="add-review-form" method="POST">
+					<div class="form-group">
+						<h2 id="modal-form-title"></h2>
+						<textarea  id="review-text" row="5" class="form-control" placeholder="E.g. Alyssa was totally welcoming when I asked for a woman's haircut!"></textarea>
+					</div>
+					<!-- Gender neutral bathrooms -->
+					<div class="form-check">
+						<h4>Do they provide gender neutral bathrooms?</h4>
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" name="gendNeutBath" id="gendNeutBathYes" value="yes">
+							Yes
+						</label>
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" name="gendNeutBath" id="gendNeutBathNo" value="no">
+							No
+						</label>
+					</div>
+					<!-- LGBT owned -->
+					<div class="form-check">
+						<h4>Is the owner a member of the LGBTQI+ community?</h4>
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" name="lgbtOwned" id="lgbtOwnedYes" value="yes">
+							Yes
+						</label>
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" name="lgbtOwned" id="lgbtOwnedNo" value="no">
+							No
+						</label>
+					</div>
+					<!-- Advertises as LGBT friendly -->
+					<div class="form-check">
+						<h4>Do they advertise as being LGBTQI+ friendly?</h4>
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" name="advertises" id="advertisesYes" value="yes">
+							Yes
+						</label>
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" name="advertises" id="advertisesNo" value="no">
+							No
+						</label>
+					</div>
+					<!-- Star rating -->
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-3 col-lg-offset-1">
+								<select id="friendliness" class="form-control">
+									<option selected>How would you rate them out of 5?</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="submit">
+						<button type="submit" class="btn btn-default">Submit</button>
+					</div>
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

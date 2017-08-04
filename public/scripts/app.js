@@ -7,6 +7,52 @@ $(document).ready(function() {
 		event.preventDefault();
 		populateMap($('#search-box').val(), map.getCenter());
 	});
+
+	$('#add-review-form').submit(function(event) {
+		event.preventDefault();
+
+		let reviewText = $('#review-text').val();
+
+		let genderNeutralBathrooms;
+		if ($('input[name=gendNeutBath]:checked', '#add-review-form').val() === 'yes') {
+			genderNeutralBathrooms = true;
+		} else { 
+			genderNeutralBathrooms = false; 
+		}
+
+		let lgbtOwned;
+		if ($('input[name=lgbtOwned]:checked', '#add-review-form').val() === 'yes') {
+			lgbtOwned = true;
+		} else { 
+			lgbtOwned = false; 
+		}
+
+		let advertises;
+		if ($('input[name=advertises]:checked', '#add-review-form').val() === 'yes') {
+			advertises = true;
+		} else { 
+			advertises = false; 
+		}
+
+		let friendliness = parseInt($('#friendliness').val());
+		let url = '/api/places/' + $('#review-modal').data('place-id');
+
+		console.log($('#review-modal').data('place-id'));
+		$.ajax({
+			method: "PUT",
+			url: url,
+			data: {
+				'friendliness': friendliness,
+				'genderNeutralBathrooms': genderNeutralBathrooms,
+				'lgbtOwned': lgbtOwned,
+				'advertises': advertises,
+				'text': reviewText
+			},
+			success: function() {
+				console.log('yay!');
+			}
+		});
+	});
 });
 
 function createInfoWindow(place, callback) {

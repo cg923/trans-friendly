@@ -2,6 +2,7 @@ const request 		= require('request');
 const bodyParser 	= require('body-parser');
 const env 			= require('../env.js');
 const db 			= require('../models');
+const passport		= require('passport');
 
 // POST /api/google
 function getPlaceFromGoogle(req, res, next) {
@@ -65,7 +66,7 @@ function addReview(req, res, next) {
 		if(typeof(req.body) === 'string') req.body = JSON.parse(req.body);
 
 		place.reviews.push({
-			author: req.body.author,
+			author: req.user.local.email,
 			friendliness: req.body.friendliness,
 			genderNeutralBathrooms: req.body.genderNeutralBathrooms,
 			lgbtOwned: req.body.lgbtOwned,
