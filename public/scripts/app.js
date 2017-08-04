@@ -190,7 +190,8 @@ function populateReviewList(place) {
 
 	    var innerDiv = $('<div></div>');
 	    innerDiv.addClass("panel-body");
-	    innerDiv.html(place.reviews[index].text);
+	    innerDiv.html("<h4>" + place.reviews[index].author + ":</h4>" + 
+	    	"<p class='review-description'>\"" + place.reviews[index].text + "\"</p>");
 
 	    if(index % 2 === 0) { 
 	      	innerDiv.addClass('pink'); 

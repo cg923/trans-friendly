@@ -30,3 +30,8 @@ select {
 .blue {
 	background: #74cdf4;
 }
+
+.review-description {
+	font-size: 20px;
+	font-style: italic;
+}
