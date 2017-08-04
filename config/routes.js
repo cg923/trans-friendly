@@ -18,6 +18,9 @@ router.route('/')
 	.get(staticsController.home);
 
 // USERS
+router.route('/user')
+	.get(usersController.getUser);
+	
 router.route('/signup')
 	.get(usersController.getSignup)
 	.post(usersController.postSignup);

@@ -1,5 +1,11 @@
 const passport = require('passport');
 
+// GET /user
+function getUser(request, response) {
+	if (request.user) { response.send(request.user.local.email); }
+	else { response.send(""); }
+}
+
 // GET /signup
 function getSignup(request, response) {
 	response.render('signup.ejs', { message: request.flash('signupMessage') });
@@ -44,6 +50,7 @@ function addReview(request, response) {
 }
 
 module.exports = {
+	getUser:    getUser,
 	getLogin: 	getLogin,
 	postLogin: 	postLogin,
 	getSignup: 	getSignup,

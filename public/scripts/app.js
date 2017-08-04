@@ -169,12 +169,12 @@ function addReview() {
 }
 
 function populateReviewList(place) {
+
 	// Clear existing reviews.
 	var reviewList = $('#review-list');
+	var thisUserReviewList = $('#this-user-review-list');
 	reviewList.html('');
-
-	// Make reviews visible
-	$('#reviews').removeClass('hidden');
+	thisUserReviewList.html('');
 
 	// Create bootstrap panel to represent review
 	place.reviews.forEach(function(element, index) {
@@ -199,12 +199,27 @@ function populateReviewList(place) {
 	    }
 	    else { 
 	      	innerDiv.addClass('blue');
-	      	outerDiv.addClass('blue')
+	      	outerDiv.addClass('blue');
 	    }
 
 	    outerDiv.append(innerDiv);
 	    row.append(outerDiv);
-	    reviewList.append(row);
+
+	    let user;
+	    $.get({
+	    	url: "/user",
+	    	success: function(result) {
+	    		console.log(result);
+	    		user = result;
+	    		if (user && place.reviews[index].author === user) {
+			    	thisUserReviewList.append(row);
+			    	$('#this-user-reviews').removeClass('hidden');
+			    } else {
+			    	reviewList.append(row);
+			    	$('#reviews').removeClass('hidden');
+			    }
+	    	},
+	    });
   	});
 }
 
