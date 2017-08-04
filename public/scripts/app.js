@@ -10,7 +10,17 @@ $(document).ready(function() {
 
 	$('#add-review-form').submit(function(event) {
 		event.preventDefault();
-		addReview();
+		// Form is not filled out completely.
+		if ($('#review-text').val() === "" ||
+			$('input[name=gendNeutBath]:checked').length === 0 ||
+			$('input[name=lgbtOwned]:checked').length === 0 ||
+			$('input[name=advertises]:checked').length === 0 ||
+			$('#friendliness').find(":selected").text() === "How would you rate them out of 5?") {
+				$('#login-error').removeClass('hidden');
+		} else {
+			$('#login-error').addClass('hidden');
+			addReview();
+		}
 	});
 });
 
