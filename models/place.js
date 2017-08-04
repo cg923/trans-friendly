@@ -15,6 +15,7 @@ var Place = mongoose.Schema({
 		lat: Number,
 		lng: Number
 	},
+	address: String,
 	friendliness: Number,
 	friendlinessTotal: Number,
 	genderNeutralBathrooms: Boolean,

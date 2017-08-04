@@ -52,6 +52,7 @@ function createOrGetPlaceFromDb(req, res, next) {
 		if (!place) {
 			var newPlace = new db.Place.Place({
 				name: 					req.body.search,
+				address:  				req.body.address,
 				friendliness: 			0,
 				friendlinessTotal: 		0,
 				genderNeutralBathrooms: false,

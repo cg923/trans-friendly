@@ -61,9 +61,9 @@ function updateInfoWindow(place) {
 	          throw console.log('invalid friendliness rating: ' + place.friendliness);
 	}
 
-	let content= "<b>" + place.name + "</b><br>" + 
-        place.vicinity + "<br><br>" + 
-        "<center>" + friendImgSrc + "</center><br>" +
+	let content= "<b>" + place.name + "</b><br>" +
+		place.address + "<br><br>" +
+		"<center>" + friendImgSrc + "</center><br>" +
         "<center>" + place.reviews.length + " reviews</center><br>" +  
         "<table>" +
         "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
@@ -75,6 +75,11 @@ function updateInfoWindow(place) {
 }
 
 function createInfoWindow(place, callback) {
+	// Determine a location for our Google Place
+	let address;
+	if (place.formatted_address) { address = place.formatted_address; }
+	else if (place.vicinity) { address = place.vicinity; }
+	else { address = "No address specified"; }
 
 	// Check our database to see if we have info about this place.
 	$.ajax({
@@ -85,7 +90,8 @@ function createInfoWindow(place, callback) {
 			'location': {
 				'lat': place.geometry.location.lat,
 				'lng': place.geometry.location.lng
-			}
+			},
+			'address': address
 		},
 		success: function(result) {
 			var infoWindow = new google.maps.InfoWindow({
