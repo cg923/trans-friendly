@@ -106,13 +106,12 @@ function createInfoWindow(place, callback) {
       		var infoWindow = new google.maps.InfoWindow({
 				content: "<b>" + place.name + "</b><br>" + 
 	                place.vicinity + "<br><br>" + 
-	                friendImgSrc + "<br><br>" + 
+	                "<center>" + friendImgSrc + "</center><br><br>" + 
 	                "<table>" +
 	                "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
 	                "<tr><td width=200>LGBT Owned:</td><td><img src='" + lgbtOwned + "'></td></tr>" +
 	                "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table><br>" +
-	                "<center><button class='btn btn-default add-review'>Write a review</button></center>" +
-	                "<br>id: " + result._id
+	                "<center><button class='btn btn-default add-review'>Write a review</button></center>"
 			});
 
       		google.maps.event.addListener(infoWindow, 'domready', function() {
@@ -261,6 +260,17 @@ function initMap() {
 	    // Denver is the default location :)
 	    center: {lat: 39.7392358, lng: -104.990251}
 	});
+
+	// Hide default business icons to prevent duplicates on map.
+	var styles = {
+        hide: [
+          	{
+            	featureType: 'poi',
+            	stylers: [{visibility: 'off'}]
+          	}
+        ]
+    };
+	map.setOptions({styles: styles['hide']});
 
 	// Try to get user's location.
 	if (navigator.geolocation) {

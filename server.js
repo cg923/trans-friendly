@@ -20,7 +20,7 @@ app.set('view engine', 'ejs');
 
 app.use(session({
 	secret: 'WDI-GENERAL-ASSEMBLY-EXPRESS',
-
+	cookie: { maxAge: 360000 }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
