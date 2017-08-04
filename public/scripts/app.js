@@ -109,7 +109,8 @@ function createInfoWindow(place, callback) {
       		var infoWindow = new google.maps.InfoWindow({
 				content: "<b>" + place.name + "</b><br>" + 
 	                place.vicinity + "<br><br>" + 
-	                "<center>" + friendImgSrc + "</center><br><br>" + 
+	                "<center>" + friendImgSrc + "</center><br>" +
+	                "<center>" + result.reviews.length + " reviews</center><br>" +  
 	                "<table>" +
 	                "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
 	                "<tr><td width=200>LGBT Owned:</td><td><img src='" + lgbtOwned + "'></td></tr>" +
