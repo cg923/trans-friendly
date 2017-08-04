@@ -23,10 +23,28 @@ function getPlaceFromGoogle(req, res, next) {
 	});
 }
 
+// GET /api/places/
+function getAllPlacesFromDb(req, res) {
+	db.Place.Place.find({}, function(err, places) {
+		if (err) throw err;
+		res.json(places);
+	});
+}
+
+// GET /api/places/:id
+function getPlaceFromDb(req, res) {
+	db.Place.Place.find({_id: req.params.id}, function(err, place) {
+		if (err) throw err;
+		res.json(place);
+	});
+}
+
 // POST /api/places/
 function createOrGetPlaceFromDb(req, res, next) {
 	if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);
-	db.Place.Place.findOne({ 'name': req.body.search, 'location.lat': req.body.location.lat, 'location.lng': req.body.location.lng })
+	db.Place.Place.findOne({ 'name': req.body.search, 
+							 'location.lat': req.body.location.lat, 
+							 'location.lng': req.body.location.lng })
 	.exec(function(err, place) {
 		if (err) throw err;
 
@@ -54,6 +72,14 @@ function createOrGetPlaceFromDb(req, res, next) {
 			// We found a matching place in our DB
 			res.json(place);
 		}
+	});
+}
+
+// DELETE /api/places/:id
+function removePlaceFromDb(req, res) {
+	db.Place.Place.findOneAndRemove({_id: req.params.id}, function(err, place) {
+		if (err) throw err;
+		res.json(place);
 	});
 }
 
@@ -93,7 +119,10 @@ function addReview(req, res, next) {
 }
 
 module.exports = {
-	getPlaceFromGoogle: getPlaceFromGoogle,
-	createOrGetPlaceFromDb: createOrGetPlaceFromDb,
-	addReview: addReview
+	getPlaceFromGoogle 		: 	getPlaceFromGoogle,
+	getAllPlacesFromDb 		: 	getAllPlacesFromDb,
+	getPlaceFromDb 	   		: 	getPlaceFromDb,
+	createOrGetPlaceFromDb 	: 	createOrGetPlaceFromDb,
+	removePlaceFromDb		:   removePlaceFromDb,
+	addReview				: 	addReview
 };

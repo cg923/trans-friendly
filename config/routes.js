@@ -35,14 +35,20 @@ router.route('/api/google')
 	.post(placesController.getPlaceFromGoogle);
 
 // index
+router.route('/api/places/')
+	.get(placesController.getAllPlacesFromDb);
 
 // show
+router.route('/api/places/:id')
+	.get(placesController.getPlaceFromDb);
 
 // create
 router.route('/api/places/')
 	.post(placesController.createOrGetPlaceFromDb);
 
 // delete
+router.route('/api/places/:id')
+	.delete(placesController.removePlaceFromDb);
 
 // update
 router.route('/api/places/:id')
