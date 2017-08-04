@@ -48,8 +48,8 @@ $(document).ready(function() {
 				'advertises': advertises,
 				'text': reviewText
 			},
-			success: function() {
-				console.log('yay!');
+			success: function(result) {
+				$('#review-modal').modal('toggle');
 			}
 		});
 	});
@@ -100,7 +100,7 @@ function createInfoWindow(place, callback) {
 			          friendImgSrc = "<img src='img/5star.png'>";
 			          break;
 		        default:
-			          throw console.log('invalid friendliness rating!');
+			          throw console.log('invalid friendliness rating: ' + result.friendliness);
       		}
 
       		var infoWindow = new google.maps.InfoWindow({
