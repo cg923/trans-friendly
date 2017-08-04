@@ -80,7 +80,10 @@ function createInfoWindow(place, callback) {
 			if (result.advertises) { advertises = '/img/check_false.png'; }
 
 			// Set rating image according to friendliness
-			switch (Math.floor(result.friendliness)) {
+			let friendliness;
+			if (result.reviews.length === 0) { friendliness = 0; }
+			else { friendliness = Math.floor(result.friendliness / result.reviews.length) };
+			switch (friendliness) {
 				case 0:
           			friendImgSrc = "No ratings";
           			break;
@@ -244,6 +247,7 @@ function populateMap(searchTerm, location) {
 		            marker.addListener('click', function() {
 		            	closeOpenInfoWindows();
 		            	populateReviewList(results);
+		       			createInfoWindow(element);
 		            	infoWindow.open(map, marker);
 		            });
 	        	});

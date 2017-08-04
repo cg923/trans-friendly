@@ -8,7 +8,7 @@ const cookieParser	= require('cookie-parser');
 const bodyParser	= require('body-parser');
 const session		= require('express-session');
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser());
 

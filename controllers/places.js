@@ -85,8 +85,8 @@ function addReview(req, res, next) {
 		}
 
 		// Calculate new friendliness score.
-		place.friendlinessTotal += req.body.friendliness;
-		place.friendliness = place.friendlinessTotal / place.reviews.length;
+		place.friendliness = parseInt(place.friendliness) + parseInt(req.body.friendliness);
+		console.log(place.friendliness);
 
 		place.save(function(err, move) {
 			res.json(place);
