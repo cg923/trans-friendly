@@ -245,8 +245,10 @@ function saveReview(placeId, reviewId) {
 			'advertises': advertises,
 			'text': reviewText
 		},
-		success: function() {
+		success: function(result) {
 			$('#review-modal').modal('toggle');
+			populateReviewList(result);
+			openInfoWindows[0].setContent(updateInfoWindow(result));
 		}
 	});
 }
