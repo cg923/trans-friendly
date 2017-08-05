@@ -57,4 +57,13 @@ router.route('/api/places/:id')
 router.route('/api/places/:id')
 	.put(authenticatedUser, placesController.addReview);
 
+// REVIEWS
+// show
+router.route('/api/places/:place_id/reviews/:review_id')
+	.get(placesController.getReview);
+
+// update
+router.route('/api/places/:place_id/reviews/:review_id')
+	.put(placesController.updateReview);
+
 module.exports = router;

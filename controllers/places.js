@@ -91,6 +91,7 @@ function addReview(req, res, next) {
 		if(typeof(req.body) === 'string') req.body = JSON.parse(req.body);
 
 		place.reviews.push({
+			placeId: req.body.placeId,
 			author: req.user.local.email,
 			friendliness: req.body.friendliness,
 			genderNeutralBathrooms: req.body.genderNeutralBathrooms,
@@ -105,13 +106,12 @@ function addReview(req, res, next) {
 		if(req.body.lgbtOwned) { 
 			place.lgbtOwned = req.body.lgbtOwned; 
 		}
-		if(req.body.advertisesLgbtFriendly) { 
-			place.advertisesLgbtFriendly = req.body.advertisesLgbtFriendly; 
+		if(req.body.advertises) { 
+			place.advertises = req.body.advertises; 
 		}
 
 		// Calculate new friendliness score.
 		place.friendliness = parseInt(place.friendliness) + parseInt(req.body.friendliness);
-		console.log(place.friendliness);
 
 		place.save(function(err, move) {
 			res.json(place);
@@ -119,11 +119,64 @@ function addReview(req, res, next) {
 	});
 }
 
+// GET /api/places/:place_id/reviews/:review_id
+function getReview(req, res) {
+	db.Place.Place.findOne({_id: req.params.place_id}, function(err, place) {
+		if (err) throw err;
+		place.reviews.forEach(function(element) {
+			if (element._id == req.params.review_id) {
+				res.json(element);
+			}
+		});
+	});
+}
+
+// PUT /api/places/:place_id/review/:review_id
+function updateReview(req, res) {
+
+	db.Place.Place.findOne({_id: req.params.place_id}, function(err, place) {
+		if(typeof(req.body) === 'string') req.body = JSON.parse(req.body);
+
+		// update review
+		place.reviews.forEach(function(element) {
+			if (element._id == req.params.review_id) {
+				// subtract previous friendliness score
+				place.friendliness -= element.friendliness;
+
+				// update
+				element.friendliness = req.body.friendliness;
+				element.genderNeutralBathrooms = req.body.genderNeutralBathrooms;
+				element.lgbtOwned = req.body.lgbtOwned;
+				element.advertises = req.body.advertises;
+				element.text = req.body.text;
+			}
+		});
+
+		if(req.body.genderNeutralBathrooms) {
+			place.genderNeutralBathrooms = req.body.genderNeutralBathrooms;
+		}
+		if(req.body.lgbtOwned) { 
+			place.lgbtOwned = req.body.lgbtOwned; 
+		}
+		if(req.body.advertisesLgbtFriendly) { 
+			place.advertisesLgbtFriendly = req.body.advertisesLgbtFriendly; 
+		}
+
+		// Calculate new friendliness score.
+		place.friendliness = parseInt(place.friendliness) + parseInt(req.body.friendliness);
+
+		place.save(function(err, move) {
+			res.json(place);
+		});
+	});
+}
 module.exports = {
 	getPlaceFromGoogle 		: 	getPlaceFromGoogle,
 	getAllPlacesFromDb 		: 	getAllPlacesFromDb,
 	getPlaceFromDb 	   		: 	getPlaceFromDb,
 	createOrGetPlaceFromDb 	: 	createOrGetPlaceFromDb,
 	removePlaceFromDb		:   removePlaceFromDb,
-	addReview				: 	addReview
+	addReview				: 	addReview,
+	getReview				:   getReview,
+	updateReview			:   updateReview
 };

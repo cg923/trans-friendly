@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 var Review = mongoose.Schema({
+	placeId: String,
 	author: String,
 	friendliness: Number,
 	genderNeutralBathrooms: Boolean,

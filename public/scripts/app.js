@@ -1,6 +1,9 @@
-var map;
-var openInfoWindows = [];
-var markers = [];
+
+// Global variables.
+let map;
+let openInfoWindows = [];
+let markers = [];
+let currentPlaceId = "";
 
 $(document).ready(function() {
 	$('#search-form').submit(function(event) {
@@ -8,6 +11,7 @@ $(document).ready(function() {
 		populateMap($('#search-box').val(), map.getCenter());
 	});
 
+	// Review submit.
 	$('#add-review-form').submit(function(event) {
 		event.preventDefault();
 		// Form is not filled out completely.
@@ -19,10 +23,67 @@ $(document).ready(function() {
 				$('#login-error').removeClass('hidden');
 		} else {
 			$('#login-error').addClass('hidden');
-			addReview();
+			if($('#review-modal').data('review-edit') === true) {
+				saveReview($('#review-modal').data('place-id'),
+						   $('#review-modal').data('review-id'));
+				$('#review-modal').data('review-edit', false);
+			} else {
+				addReview();
+			}
 		}
 	});
+
+	// Review edit.
+	$('.review-list').on('click', '.edit-review', function(e) {
+		// Give modal data for saving.
+		$('#review-modal').data('place-id', $(this).parent().parent().data('place-id'));
+		$('#review-modal').data('review-id', $(this).parent().parent().data('review-id'));
+		$('#review-modal').data('review-edit', true);
+		// Fill in modal with existing review data.
+		$.ajax({
+			method: "GET",
+			url: '/api/places/' + $('#review-modal').data('place-id'),
+			success: function(places) {
+				$('#modal-form-title').html('What do you think of ' + places[0].name + '?');
+				let review;
+				places[0].reviews.forEach(function(element) {
+					if (element._id === $('#review-modal').data('review-id')) {
+						review = element;
+					}
+				});
+				// Fill in form with existing review data.
+				$('#review-text').html(review.text);
+				if (review.genderNeutralBathrooms) { $('#gendNeutBathYes').prop('checked', true);} 
+				else { $('#gendNeutBathNo').prop('checked', true); }
+				if (review.lgbtOwned) { $('#lgbtOwnedYes').prop('checked', true);} 
+				else { $('#lgbtOwnedNo').prop('checked', true); }
+				if (review.advertises) { $('#advertisesYes').prop('checked', true);} 
+				else { $('#advertisesNo').prop('checked', true); }
+				$('#friendliness').val(review.friendliness);
+			}
+		});
+		$('#review-modal').modal();
+	});
 });
+
+function generateFriendlinessImage(friendliness) {
+	switch (friendliness) {
+	case 0:
+		return "No ratings";
+    case 1:
+        return "<img src='img/1star.png'>";
+    case 2:
+        return "<img src='img/2star.png'>";
+    case 3:
+        return "<img src='img/3star.png'>";
+    case 4:
+        return "<img src='img/4star.png'>";
+    case 5:
+        return "<img src='img/5star.png'>";
+    default:
+        throw console.log('invalid friendliness rating: ' + friendliness);
+	}
+}
 
 function updateInfoWindow(place) {
 	let friendliness;
@@ -37,29 +98,8 @@ function updateInfoWindow(place) {
 
 	// Set rating image according to friendliness
 	if (place.reviews.length === 0) { friendliness = 0; }
-	else { friendliness = Math.floor(place.friendliness / place.reviews.length) };
-	switch (friendliness) {
-		case 0:
-  			friendImgSrc = "No ratings";
-  			break;
-        case 1:
-	          friendImgSrc = "<img src='img/1star.png'>";
-	          break;
-        case 2:
-	          friendImgSrc = "<img src='img/2star.png'>";
-	          break;
-        case 3:
-	          friendImgSrc = "<img src='img/3star.png'>";
-	          break;
-        case 4:
-	          friendImgSrc = "<img src='img/4star.png'>";
-	          break;
-        case 5:
-	          friendImgSrc = "<img src='img/5star.png'>";
-	          break;
-        default:
-	          throw console.log('invalid friendliness rating: ' + place.friendliness);
-	}
+	else { friendliness = Math.floor(place.friendliness / place.reviews.length); }
+	friendImgSrc = generateFriendlinessImage(friendliness);
 
 	let content= "<b>" + place.name + "</b><br>" +
 		place.address + "<br><br>" +
@@ -154,6 +194,7 @@ function addReview() {
 		method: "PUT",
 		url: url,
 		data: {
+			'placeId': $('#review-modal').data('place-id'),
 			'friendliness': friendliness,
 			'genderNeutralBathrooms': genderNeutralBathrooms,
 			'lgbtOwned': lgbtOwned,
@@ -168,6 +209,48 @@ function addReview() {
 	});
 }
 
+function saveReview(placeId, reviewId) {
+	let reviewText = $('#review-text').val();
+
+	let genderNeutralBathrooms;
+	if ($('input[name=gendNeutBath]:checked', '#add-review-form').val() === 'yes') {
+		genderNeutralBathrooms = true;
+	} else { 
+		genderNeutralBathrooms = false; 
+	}
+
+	let lgbtOwned;
+	if ($('input[name=lgbtOwned]:checked', '#add-review-form').val() === 'yes') {
+		lgbtOwned = true;
+	} else { 
+		lgbtOwned = false; 
+	}
+
+	let advertises;
+	if ($('input[name=advertises]:checked', '#add-review-form').val() === 'yes') {
+		advertises = true;
+	} else { 
+		advertises = false; 
+	}
+
+	let friendliness = parseInt($('#friendliness').val());
+
+	$.ajax({
+		method: "PUT",
+		url: '/api/places/' + placeId + '/reviews/' + reviewId,
+		data: {
+			'friendliness': friendliness,
+			'genderNeutralBathrooms': genderNeutralBathrooms,
+			'lgbtOwned': lgbtOwned,
+			'advertises': advertises,
+			'text': reviewText
+		},
+		success: function() {
+			$('#review-modal').modal('toggle');
+		}
+	});
+}
+
 function populateReviewList(place) {
 
 	// Clear existing reviews.
@@ -178,44 +261,42 @@ function populateReviewList(place) {
 
 	// Create bootstrap panel to represent review
 	place.reviews.forEach(function(element, index) {
+	    var $outerDiv = $('<li></li>');
+	    $outerDiv.data('place-id', element.placeId);
+	    $outerDiv.data('review-id', element._id);
+	    $outerDiv.addClass("panel");
+	    $outerDiv.addClass("panel-default");
 
-	    var row = $('<div></div>');
-	    row.addClass("row");
-
-	    var outerDiv = $('<div></div>');
-	    outerDiv.addClass("panel");
-	    outerDiv.addClass("panel-default");
-	    outerDiv.addClass("col-lg-10");
-	    outerDiv.addClass("col-lg-offset-1")
-
-	    var innerDiv = $('<div></div>');
+	    var innerDiv = $("<div class='row'></div>");
 	    innerDiv.addClass("panel-body");
-	    innerDiv.html("<h4>" + place.reviews[index].author + ":</h4>" + 
-	    	"<p class='review-description'>\"" + place.reviews[index].text + "\"</p>");
+	    innerDiv.html("<div class='row'><div class='col-lg-12'><h4>" + place.reviews[index].author + ":</h4></div></div>" +
+	    	"<div class='row'><div class='col-lg-4'>" + generateFriendlinessImage(place.reviews[index].friendliness) + "</div>" +
+	    	"<div class='col-lg-8'><p class='review-description'>\"" + place.reviews[index].text + "\"</p></div></div>");
 
 	    if(index % 2 === 0) { 
 	      	innerDiv.addClass('pink'); 
-	      	outerDiv.addClass('pink');
+	      	$outerDiv.addClass('pink');
 	    }
 	    else { 
 	      	innerDiv.addClass('blue');
-	      	outerDiv.addClass('blue');
+	      	$outerDiv.addClass('blue');
 	    }
 
-	    outerDiv.append(innerDiv);
-	    row.append(outerDiv);
+	    $outerDiv.append(innerDiv);
 
 	    let user;
 	    $.get({
 	    	url: "/user",
 	    	success: function(result) {
-	    		console.log(result);
 	    		user = result;
 	    		if (user && place.reviews[index].author === user) {
-			    	thisUserReviewList.append(row);
+	    			innerDiv.html(innerDiv.html() + 
+	    				"<br><button class='btn btn-default edit-review'>Edit</button>" + 
+	    				"<button class='btn btn-danger delete-review'>Delete</button>");
+			    	thisUserReviewList.append($outerDiv);
 			    	$('#this-user-reviews').removeClass('hidden');
 			    } else {
-			    	reviewList.append(row);
+			    	reviewList.append($outerDiv);
 			    	$('#reviews').removeClass('hidden');
 			    }
 	    	},
@@ -265,6 +346,8 @@ function populateMap(searchTerm, location) {
 	        },
 	      	radius: radius
     	},
+    	// TO DO - this is returning Google Places places.
+    	// It should probably be returning our db places.
 	    success: function(results) {
 	      
 	        // Remove active markers from the map.

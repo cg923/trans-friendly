@@ -32,6 +32,15 @@ select {
 }
 
 .review-description {
+	display: inline;
 	font-size: 20px;
 	font-style: italic;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	margin-left: -30px;
 }
