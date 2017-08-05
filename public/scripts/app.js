@@ -11,7 +11,7 @@ $(document).ready(function() {
 		populateMap($('#search-box').val(), map.getCenter());
 	});
 
-	// Review submit.
+	// Submit review.
 	$('#add-review-form').submit(function(event) {
 		event.preventDefault();
 		// Form is not filled out completely.
@@ -33,7 +33,7 @@ $(document).ready(function() {
 		}
 	});
 
-	// Review edit.
+	// Edit review.
 	$('.review-list').on('click', '.edit-review', function(e) {
 		// Give modal data for saving.
 		$('#review-modal').data('place-id', $(this).parent().parent().data('place-id'));
@@ -63,6 +63,26 @@ $(document).ready(function() {
 			}
 		});
 		$('#review-modal').modal();
+	});
+
+	// Delete review.
+	$('.review-list').on('click', '.delete-review', function(e) {
+		$('#delete-modal').data('place-id', $(this).parent().parent().data('place-id'));
+		$('#delete-modal').data('review-id', $(this).parent().parent().data('review-id'));
+		$('#delete-modal').modal();
+	});
+
+	$('#delete-modal-delete').on('click', function(e) {
+		e.preventDefault();
+		$.ajax({
+			method: "DELETE",
+			url: '/api/places/' + $('#delete-modal').data('place-id') + '/reviews/' + $('#delete-modal').data('review-id'),
+			success: function(result) {
+				console.log('holy shit it worked');
+				populateReviewList(result);
+				openInfoWindows[0].setContent(updateInfoWindow(result));
+			}
+		});
 	});
 });
 

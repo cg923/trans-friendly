@@ -66,4 +66,8 @@ router.route('/api/places/:place_id/reviews/:review_id')
 router.route('/api/places/:place_id/reviews/:review_id')
 	.put(placesController.updateReview);
 
+// delete
+router.route('/api/places/:place_id/reviews/:review_id')
+	.delete(placesController.removeReview);
+
 module.exports = router;

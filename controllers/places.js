@@ -113,7 +113,7 @@ function addReview(req, res, next) {
 		// Calculate new friendliness score.
 		place.friendliness = parseInt(place.friendliness) + parseInt(req.body.friendliness);
 
-		place.save(function(err, move) {
+		place.save(function(err, place) {
 			res.json(place);
 		});
 	});
@@ -165,11 +165,29 @@ function updateReview(req, res) {
 		// Calculate new friendliness score.
 		place.friendliness = parseInt(place.friendliness) + parseInt(req.body.friendliness);
 
-		place.save(function(err, move) {
+		place.save(function(err, place) {
 			res.json(place);
 		});
 	});
 }
+
+// DELETE /api/places/:place_id/reviews/:review_id
+function removeReview(req, res) {
+	db.Place.Place.findOne({_id: req.params.place_id}, function(err, place) {
+		if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);
+
+		place.reviews.forEach(function(element, index) {
+			if (element._id == req.params.review_id) {
+				place.reviews.splice(index, 1);
+			}
+		});
+
+		place.save(function(err, place) {
+			res.json(place);
+		});
+	});
+}
+
 module.exports = {
 	getPlaceFromGoogle 		: 	getPlaceFromGoogle,
 	getAllPlacesFromDb 		: 	getAllPlacesFromDb,
@@ -178,5 +196,6 @@ module.exports = {
 	removePlaceFromDb		:   removePlaceFromDb,
 	addReview				: 	addReview,
 	getReview				:   getReview,
-	updateReview			:   updateReview
+	updateReview			:   updateReview,
+	removeReview			:   removeReview
 };
