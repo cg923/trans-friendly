@@ -18,7 +18,6 @@ var Place = mongoose.Schema({
 	},
 	address: String,
 	friendliness: Number,
-	friendlinessTotal: Number,
 	genderNeutralBathrooms: Boolean,
 	lgbtOwned: Boolean,
 	// Advertises as LGBT friendly.

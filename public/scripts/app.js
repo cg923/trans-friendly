@@ -26,7 +26,6 @@ $(document).ready(function() {
 			if($('#review-modal').data('review-edit') === true) {
 				saveReview($('#review-modal').data('place-id'),
 						   $('#review-modal').data('review-id'));
-				$('#review-modal').data('review-edit', false);
 			} else {
 				addReview();
 			}
@@ -267,6 +266,18 @@ function saveReview(placeId, reviewId) {
 		},
 		success: function(result) {
 			$('#review-modal').modal('toggle');
+			// Restore modal to it's natural state.
+			$('#review-modal').data('review-edit', false);
+			$('#review-modal').data('place-id', '');
+			$('#review.modal').data('review-id', '');
+			$('#review-text').html('');
+			$('#gendNeutBathYes').prop('checked', false);
+			$('#gendNeutBathNo').prop('checked', false);
+			$('#lgbtOwnedYes').prop('checked', false);
+			$('#lgbtOwnedNo').prop('checked', false);
+			$('#advertisesYes').prop('checked', false); 
+			$('#advertisesNo').prop('checked', false);
+			$('#friendliness').val(0);
 			populateReviewList(result);
 			openInfoWindows[0].setContent(updateInfoWindow(result));
 		}

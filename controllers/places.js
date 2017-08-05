@@ -141,7 +141,7 @@ function updateReview(req, res) {
 		place.reviews.forEach(function(element) {
 			if (element._id == req.params.review_id) {
 				// subtract previous friendliness score
-				place.friendliness -= element.friendliness;
+				place.friendliness -= parseInt(element.friendliness);
 
 				// update
 				element.friendliness = req.body.friendliness;
@@ -178,6 +178,7 @@ function removeReview(req, res) {
 
 		place.reviews.forEach(function(element, index) {
 			if (element._id == req.params.review_id) {
+				place.friendliness -= parseInt(element.friendliness);
 				place.reviews.splice(index, 1);
 			}
 		});
