@@ -1,62 +1,52 @@
 <% include ./partials/header.ejs %>
 
 <!-- SEARCH AND BROWSE -->
-<div class="container">
-	<div class="row pink">
+<div class="container-fluid welcome pink">
+	<div class="row">
 		<!-- Search -->
-		<div class="search col-lg-4 col-lg-offset-1">
+		<div class="search col-lg-8 col-lg-offset-2">
 			<form id="search-form">
 				<div class="row">
-					<h2>Search for anything!</h2>
-					<div class="form-group">
-						<label for="search-box">
-							What are you looking for?
-						</label>
-						<input type="text" class="form-control" id="search-box" placeholder="E.g. Doctors, restaurants, anything!">
+					<div class="col-lg-11">
+						<div class="form-group">
+							<label id="search-box-label" class="main-label" for="search-box">
+								What are you looking for?
+							</label>
+							<input type="text" class="form-control" id="search-box" placeholder="E.g. Doctors, restaurants, anything!">
+						</div>
 					</div>
-					<div class="submit">
+					<div class="submit col-lg-1">
 						<button type="submit" class="btn btn-default">Submit</button>
 					</div>
 				</div>
 			</form>
 		</div>
-		<!-- Browse -->
-		<div class="col-lg-4 col-lg-offset-1">
-			<h2>Browse by category</h2>
-			Coming soon!
-		</div>
 	</div>
 </div>
 
 <!-- CONTENT -->
-<div class="container">
-    <div class="row">
-    	<!-- MAP -->
-	    <div class="col-lg-6">
+<div class="container-fluid">
+	<!-- MAP -->
+    <div id="map-row" class="row pink">
+	    <div class="col-lg-10 col-lg-offset-1">
 	        <div class="map" id="map"></div>
 	    </div>
-	   	<!-- REVIEWS -->
-	    <div class="col-lg-6">
-			<div class="container">
-				<div id="this-user-reviews" class="row hidden">
-					<div class="col-lg-6">
-						<h4>Your Review:</h4>
-						<ul id="this-user-review-list" class="review-list">
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="container">
-				<div id="reviews" class="row hidden">
-					<div class="col-lg-6">
-						<h4>Other's Reviews:</h4>
-						<ul id="review-list" class="review-list">
-						</ul>
-					</div>
-				</div>
-			</div>
-	    </div>
-    </div>
+	</div>
+	<!-- REVIEWS -->
+	<div id="this-user-reviews"class="row pink hidden">
+	    <div class="col-lg-10 col-lg-offset-1">
+			<h3 class="review-section-title">Your Review:</h3>
+			<ul id="this-user-review-list" class="review-list">
+			</ul>
+		</div>
+	</div>
+	<div id="reviews" class="row pink hidden">
+		<div class="col-lg-10 col-lg-offset-1">
+			<h3 class="review-section-title">Other's Reviews:</h3>
+			<ul id="review-list" class="review-list">
+			</ul>
+		</div>
+	</div>
 </div>
 
 <!-- ADD REVIEW MODAL -->

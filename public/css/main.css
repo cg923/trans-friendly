@@ -1,15 +1,16 @@
-body {
-	padding-top: 50px;
+* {
+	font-family: 'Roboto', sans-serif;
 }
 
 /* Bootstrap overrides */
-.navbar {
+nav {
+	min-height: 60px;
 	background: #74CDF4;
 }
 
 /* Page structure */
 .search {
-	min-height: 200px;
+	min-height: 60px;
 }
 
 select {
@@ -20,9 +21,70 @@ select {
 #map {
 	height: 500px;
 	width: 100%;
+	border-radius: 10px;
 }
 
 /* Pure style, baby */
+.menu {
+	position: relative;
+	bottom: -23px;
+}
+
+.logo {
+	display: inline;
+	margin-left: 0px;
+	font-size: 36px;
+	color: white;
+}
+
+.sub-logo {
+	display: inline;
+	font-size: 18px;
+	color: white;
+	margin-left: 10px;
+}
+
+a, a:hover, a:link, a:focus {
+	color: white;
+	text-decoration: none
+}
+
+a:hover {
+	position: relative;
+	top: -2px;
+	left: -2px;
+}
+
+.user-menu {
+	font-size: 24px;
+	color: white;
+	float: right;
+	display: inline;
+	list-style: none;
+}
+
+.menu-item {
+	margin: 0px 10px;
+	list-style: none;
+	display: inline;
+	position: relative;
+	top: 12px;
+}
+
+.welcome {
+	padding: 10px 0px 10px 20px;
+}
+
+.main-label {
+	font-weight: 300;
+	color: white;
+}
+
+.submit {
+	position: relative;
+	bottom: -24px;
+}
+
 .pink {
 	background: #ebadb9;
 }
@@ -31,9 +93,25 @@ select {
 	background: #74cdf4;
 }
 
+#map-row {
+	padding-bottom: 30px;
+}
+
+.review-section-title {
+	text-align: center;
+	color: white;
+}
+
+.review {
+	padding: 0;
+	margin: 0px 0px 10px 0px;
+	position: relative;
+	left: -20px;
+}
+
 .review-description {
 	display: inline;
-	font-size: 20px;
+	font-size: 16px;
 	font-style: italic;
 }
 
@@ -41,6 +119,11 @@ ul {
 	list-style: none;
 }
 
-li {
-	margin-left: -30px;
+h3 {
+	color: white;
+}
+
+footer {
+	color: white;
+	min-height: 60px;
 }

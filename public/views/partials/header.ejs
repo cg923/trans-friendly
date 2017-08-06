@@ -4,22 +4,21 @@
 		<title>Trans Friendly</title>
 		<link rel="stylesheet" href="./css/bootstrap.min.css">
 		<link rel="stylesheet" href="./css/main.css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
 	</head>
 	<body>
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="/">Trans Friendly</a>
-				</div>
-				<ul class="nav navbar-nav">
+		<nav>
+			<div class="container menu">
+				<a href="/" class="logo">trans friendly</a>
+				<ul class="user-menu">
 					<% if (currentUser) { %>
-						<li><a href="/logout">Logout <%= currentUser.local.email %></a></li>
+						<li class="menu-item"><a href="/logout">Logout <%= currentUser.local.email %></a></li>
 					<% } else { %>
-						<li><a href="/login">Login</a></li>
-						<li><a href="/signup">Signup</a></li>
+						<li class="menu-item"><a href="/login">Login</a></li>
+						<li class="menu-item"><a href="/signup">Signup</a></li>
 					<% } %>
 				</ul>
 			</div>
 		</nav>
 
-		<main class="container">
+		<main>

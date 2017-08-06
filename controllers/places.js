@@ -190,6 +190,12 @@ function removeReview(req, res) {
 			}
 		});
 
+		if(place.reviews.length === 0) {
+			place.genderNeutralBathrooms = false;
+			place.lgbtOwned = false;
+			place.advertises = false;
+		}
+
 		place.save(function(err, place) {
 			res.json(place);
 		});

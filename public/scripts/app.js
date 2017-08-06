@@ -245,7 +245,6 @@ function addReview() {
 		success: function(result) {
 			$('#review-modal').modal('toggle');
 			populateReviewList(result.name);
-			console.log(openInfoWindows);
 			openInfoWindows.setContent(updateInfoWindow(result));
 		}
 	});
@@ -315,6 +314,8 @@ function populateReviewList(placeName) {
 
 	// Clear existing reviews.
 	var reviewList = $('#review-list');
+	$('#this-user-reviews').addClass('hidden');
+	$('#reviews').addClass('hidden');
 	var thisUserReviewList = $('#this-user-review-list');
 	reviewList.html('');
 	thisUserReviewList.html('');
@@ -325,29 +326,22 @@ function populateReviewList(placeName) {
 		success: function(place) {
 			// Create bootstrap panel to represent review
 			place.reviews.forEach(function(element, index) {
-			    var $outerDiv = $('<li></li>');
+			    var $outerDiv = $("<li class='review'></li>");
 			    $outerDiv.data('place-id', element.placeId);
 			    $outerDiv.data('review-id', element._id);
 			    $outerDiv.addClass("panel");
 			    $outerDiv.addClass("panel-default");
 
-			    var innerDiv = $("<div class='row'></div>");
+			    var innerDiv = $("<div></div>");
 			    innerDiv.addClass("panel-body");
-			    innerDiv.html("<div class='row'><div class='col-lg-12'><h4>" + place.reviews[index].author + ":</h4></div></div>" +
-			    	"<div class='row'><div class='col-lg-4'>" + generateFriendlinessImage(place.reviews[index].friendliness) + "</div>" +
-			    	"<div class='col-lg-8'><p class='review-description'>\"" + place.reviews[index].text + "\"</p></div></div>");
+			    innerDiv.html("<div><div><h4>" + place.reviews[index].author + ":</h4></div></div>" +
+			    	"<div><div>" + generateFriendlinessImage(place.reviews[index].friendliness) + "</div>" +
+			    	"<div><p class='review-description'>\"" + place.reviews[index].text + "\"</p></div></div>");
 
-			    if(index % 2 === 0) { 
-			      	innerDiv.addClass('pink'); 
-			      	$outerDiv.addClass('pink');
-			    }
-			    else { 
-			      	innerDiv.addClass('blue');
-			      	$outerDiv.addClass('blue');
-			    }
+			    innerDiv.addClass('blue');
+			    $outerDiv.addClass('blue');
 
 			    $outerDiv.append(innerDiv);
-
 
 	    		if (username && place.reviews[index].author === username) {
 	    			innerDiv.html(innerDiv.html() + 
