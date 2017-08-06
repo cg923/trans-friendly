@@ -55,7 +55,7 @@ router.route('/api/places/:id')
 
 // delete
 router.route('/api/places/:id')
-	.delete(placesController.removePlaceFromDb);
+	.delete(authenticatedUser, placesController.removePlaceFromDb);
 
 // update
 router.route('/api/places/:id')
@@ -68,10 +68,10 @@ router.route('/api/places/:place_id/reviews/:review_id')
 
 // update
 router.route('/api/places/:place_id/reviews/:review_id')
-	.put(placesController.updateReview);
+	.put(authenticatedUser, placesController.updateReview);
 
 // delete
 router.route('/api/places/:place_id/reviews/:review_id')
-	.delete(placesController.removeReview);
+	.delete(authenticatedUser, placesController.removeReview);
 
 module.exports = router;

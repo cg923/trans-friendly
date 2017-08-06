@@ -94,7 +94,6 @@ function removePlaceFromDb(req, res) {
 
 // PUT /api/places/:id
 function addReview(req, res, next) {
-
 	db.Place.Place.findOne({_id: req.params.id}, function(err, place) {
 		if(typeof(req.body) === 'string') req.body = JSON.parse(req.body);
 
