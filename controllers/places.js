@@ -31,14 +31,6 @@ function getAllPlacesFromDb(req, res) {
 	});
 }
 
-// GET /api/places/:id
-function getPlaceFromDb(req, res) {
-	db.Place.Place.find({_id: req.params.id}, function(err, place) {
-		if (err) throw err;
-		res.json(place);
-	});
-}
-
 // POST /api/places/
 function createOrGetPlaceFromDb(req, res, next) {
 	if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);
@@ -73,6 +65,22 @@ function createOrGetPlaceFromDb(req, res, next) {
 			// We found a matching place in our DB
 			res.json(place);
 		}
+	});
+}
+
+// SEARCH /api/places/search
+function searchForPlaceInDb(req, res) {
+	db.Place.Place.findOne({name: req.query.name}, function(err, place) {
+		if (err) throw err;
+		res.json(place);
+	});
+}
+
+// GET /api/places/:id
+function getPlaceFromDb(req, res) {
+	db.Place.Place.find({_id: req.params.id}, function(err, place) {
+		if (err) throw err;
+		res.json(place);
 	});
 }
 
@@ -193,6 +201,7 @@ module.exports = {
 	getPlaceFromGoogle 		: 	getPlaceFromGoogle,
 	getAllPlacesFromDb 		: 	getAllPlacesFromDb,
 	getPlaceFromDb 	   		: 	getPlaceFromDb,
+	searchForPlaceInDb      :   searchForPlaceInDb,
 	createOrGetPlaceFromDb 	: 	createOrGetPlaceFromDb,
 	removePlaceFromDb		:   removePlaceFromDb,
 	addReview				: 	addReview,

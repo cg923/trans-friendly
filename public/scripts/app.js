@@ -1,7 +1,7 @@
 
 // Global variables.
 let map;
-let openInfoWindows = [];
+let openInfoWindows;
 let markers = [];
 let currentPlaceId = "";
 
@@ -35,6 +35,7 @@ $(document).ready(function() {
 	// Edit review.
 	$('.review-list').on('click', '.edit-review', function(e) {
 		// Give modal data for saving.
+		clearReviewModal();
 		$('#review-modal').data('place-id', $(this).parent().parent().data('place-id'));
 		$('#review-modal').data('review-id', $(this).parent().parent().data('review-id'));
 		$('#review-modal').data('review-edit', true);
@@ -51,7 +52,7 @@ $(document).ready(function() {
 					}
 				});
 				// Fill in form with existing review data.
-				$('#review-text').html(review.text);
+				$('#review-text').val(review.text);
 				if (review.genderNeutralBathrooms) { $('#gendNeutBathYes').prop('checked', true);} 
 				else { $('#gendNeutBathNo').prop('checked', true); }
 				if (review.lgbtOwned) { $('#lgbtOwnedYes').prop('checked', true);} 
@@ -77,9 +78,8 @@ $(document).ready(function() {
 			method: "DELETE",
 			url: '/api/places/' + $('#delete-modal').data('place-id') + '/reviews/' + $('#delete-modal').data('review-id'),
 			success: function(result) {
-				console.log('holy shit it worked');
-				populateReviewList(result);
-				openInfoWindows[0].setContent(updateInfoWindow(result));
+				populateReviewList(result.name);
+				openInfoWindows.setContent(updateInfoWindow(result));
 			}
 		});
 	});
@@ -159,6 +159,7 @@ function createInfoWindow(place, callback) {
 
       		google.maps.event.addListener(infoWindow, 'domready', function() {
       			$('.add-review').click(function() {
+      				clearReviewModal();
       				$('#review-modal').data('place-id', result._id);
       				$('#modal-form-title').html('What do you think of ' + place.name + '?');
       				$('#review-modal').modal();
@@ -175,11 +176,9 @@ function closeOpenInfoWindows() {
 	$('#reviews').addClass('hidden');
 
 	// Close info windows.
-	if (openInfoWindows.length === 0) return;
+	if (!openInfoWindows) return;
 
-	openInfoWindows.forEach(function(element) {
-		element.close();
-	});
+	openInfoWindows.close();
 }
 
 function addReview() {
@@ -222,8 +221,9 @@ function addReview() {
 		},
 		success: function(result) {
 			$('#review-modal').modal('toggle');
-			populateReviewList(result);
-			openInfoWindows[0].setContent(updateInfoWindow(result));
+			populateReviewList(result.name);
+			console.log(openInfoWindows);
+			openInfoWindows.setContent(updateInfoWindow(result));
 		}
 	});
 }
@@ -267,24 +267,28 @@ function saveReview(placeId, reviewId) {
 		success: function(result) {
 			$('#review-modal').modal('toggle');
 			// Restore modal to it's natural state.
-			$('#review-modal').data('review-edit', false);
-			$('#review-modal').data('place-id', '');
-			$('#review.modal').data('review-id', '');
-			$('#review-text').html('');
-			$('#gendNeutBathYes').prop('checked', false);
-			$('#gendNeutBathNo').prop('checked', false);
-			$('#lgbtOwnedYes').prop('checked', false);
-			$('#lgbtOwnedNo').prop('checked', false);
-			$('#advertisesYes').prop('checked', false); 
-			$('#advertisesNo').prop('checked', false);
-			$('#friendliness').val(0);
-			populateReviewList(result);
-			openInfoWindows[0].setContent(updateInfoWindow(result));
+			clearReviewModal();
+			populateReviewList(result.name);
+			openInfoWindows.setContent(updateInfoWindow(result));
 		}
 	});
 }
 
-function populateReviewList(place) {
+function clearReviewModal() {
+	$('#review-modal').data('review-edit', false);
+	$('#review-modal').data('place-id', '');
+	$('#review.modal').data('review-id', '');
+	$('#review-text').val('');
+	$('#gendNeutBathYes').prop('checked', false);
+	$('#gendNeutBathNo').prop('checked', false);
+	$('#lgbtOwnedYes').prop('checked', false);
+	$('#lgbtOwnedNo').prop('checked', false);
+	$('#advertisesYes').prop('checked', false); 
+	$('#advertisesNo').prop('checked', false);
+	$('#friendliness').val(0);
+}
+
+function populateReviewList(placeName) {
 
 	// Clear existing reviews.
 	var reviewList = $('#review-list');
@@ -292,49 +296,55 @@ function populateReviewList(place) {
 	reviewList.html('');
 	thisUserReviewList.html('');
 
-	// Create bootstrap panel to represent review
-	place.reviews.forEach(function(element, index) {
-	    var $outerDiv = $('<li></li>');
-	    $outerDiv.data('place-id', element.placeId);
-	    $outerDiv.data('review-id', element._id);
-	    $outerDiv.addClass("panel");
-	    $outerDiv.addClass("panel-default");
+	$.ajax({
+		method: 'GET',
+		url: '/api/places/search?name=' + placeName,
+		success: function(place) {
+			// Create bootstrap panel to represent review
+			place.reviews.forEach(function(element, index) {
+			    var $outerDiv = $('<li></li>');
+			    $outerDiv.data('place-id', element.placeId);
+			    $outerDiv.data('review-id', element._id);
+			    $outerDiv.addClass("panel");
+			    $outerDiv.addClass("panel-default");
 
-	    var innerDiv = $("<div class='row'></div>");
-	    innerDiv.addClass("panel-body");
-	    innerDiv.html("<div class='row'><div class='col-lg-12'><h4>" + place.reviews[index].author + ":</h4></div></div>" +
-	    	"<div class='row'><div class='col-lg-4'>" + generateFriendlinessImage(place.reviews[index].friendliness) + "</div>" +
-	    	"<div class='col-lg-8'><p class='review-description'>\"" + place.reviews[index].text + "\"</p></div></div>");
+			    var innerDiv = $("<div class='row'></div>");
+			    innerDiv.addClass("panel-body");
+			    innerDiv.html("<div class='row'><div class='col-lg-12'><h4>" + place.reviews[index].author + ":</h4></div></div>" +
+			    	"<div class='row'><div class='col-lg-4'>" + generateFriendlinessImage(place.reviews[index].friendliness) + "</div>" +
+			    	"<div class='col-lg-8'><p class='review-description'>\"" + place.reviews[index].text + "\"</p></div></div>");
 
-	    if(index % 2 === 0) { 
-	      	innerDiv.addClass('pink'); 
-	      	$outerDiv.addClass('pink');
-	    }
-	    else { 
-	      	innerDiv.addClass('blue');
-	      	$outerDiv.addClass('blue');
-	    }
-
-	    $outerDiv.append(innerDiv);
-
-	    let user;
-	    $.get({
-	    	url: "/user",
-	    	success: function(result) {
-	    		user = result;
-	    		if (user && place.reviews[index].author === user) {
-	    			innerDiv.html(innerDiv.html() + 
-	    				"<br><button class='btn btn-default edit-review'>Edit</button>" + 
-	    				"<button class='btn btn-danger delete-review'>Delete</button>");
-			    	thisUserReviewList.append($outerDiv);
-			    	$('#this-user-reviews').removeClass('hidden');
-			    } else {
-			    	reviewList.append($outerDiv);
-			    	$('#reviews').removeClass('hidden');
+			    if(index % 2 === 0) { 
+			      	innerDiv.addClass('pink'); 
+			      	$outerDiv.addClass('pink');
 			    }
-	    	},
-	    });
-  	});
+			    else { 
+			      	innerDiv.addClass('blue');
+			      	$outerDiv.addClass('blue');
+			    }
+
+			    $outerDiv.append(innerDiv);
+
+			    let user;
+			    $.get({
+			    	url: "/user",
+			    	success: function(result) {
+			    		user = result;
+			    		if (user && place.reviews[index].author === user) {
+			    			innerDiv.html(innerDiv.html() + 
+			    				"<br><button class='btn btn-default edit-review'>Edit</button>" + 
+			    				"<button class='btn btn-danger delete-review'>Delete</button>");
+					    	thisUserReviewList.append($outerDiv);
+					    	$('#this-user-reviews').removeClass('hidden');
+					    } else {
+					    	reviewList.append($outerDiv);
+					    	$('#reviews').removeClass('hidden');
+					    }
+			    	},
+			    });
+		  	});
+		}
+	});
 }
 
 function calculateSearchRadius() {
@@ -379,8 +389,6 @@ function populateMap(searchTerm, location) {
 	        },
 	      	radius: radius
     	},
-    	// TO DO - this is returning Google Places places.
-    	// It should probably be returning our db places.
 	    success: function(results) {
 	      
 	        // Remove active markers from the map.
@@ -403,9 +411,9 @@ function populateMap(searchTerm, location) {
 		            // When user clicks on a marker, display the corresponding infoWindow.
 		            marker.addListener('click', function() {
 		            	closeOpenInfoWindows();
-		            	populateReviewList(results);
+		            	populateReviewList(element.name);
 		            	infoWindow.open(map, marker);
-		            	openInfoWindows.push(infoWindow);
+		            	openInfoWindows = infoWindow;
 		            });
 	        	});
 	    	});

@@ -41,13 +41,17 @@ router.route('/api/google')
 router.route('/api/places/')
 	.get(placesController.getAllPlacesFromDb);
 
-// show
-router.route('/api/places/:id')
-	.get(placesController.getPlaceFromDb);
-
 // create
 router.route('/api/places/')
 	.post(placesController.createOrGetPlaceFromDb);
+
+// search
+router.route('/api/places/search')
+	.get(placesController.searchForPlaceInDb);
+
+// show
+router.route('/api/places/:id')
+	.get(placesController.getPlaceFromDb);
 
 // delete
 router.route('/api/places/:id')
