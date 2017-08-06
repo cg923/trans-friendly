@@ -4,8 +4,17 @@ let map;
 let openInfoWindows;
 let markers = [];
 let currentPlaceId = "";
+let username;
 
 $(document).ready(function() {
+	$.ajax({
+		method: 'GET',
+		url: '/user',
+		success: function(result) {
+			username = result;
+		}
+	});
+
 	$('#search-form').submit(function(event) {
 		event.preventDefault();
 		populateMap($('#search-box').val(), map.getCenter());
@@ -104,6 +113,16 @@ function generateFriendlinessImage(friendliness) {
 	}
 }
 
+function hasUserReviewed(place) {
+	let hasReviewed = false;
+	place.reviews.forEach(function(element) {
+		if (element.author === username) { 
+			hasReviewed = true; 
+		}
+	});
+	return hasReviewed;
+}
+
 function updateInfoWindow(place) {
 	let friendliness;
 	let friendImgSrc = '';
@@ -112,8 +131,8 @@ function updateInfoWindow(place) {
 	let advertises = '/img/check_false.png';
 
 	if (place.genderNeutralBathrooms) { genNeutBath = 'img/check_true.png'; }
-	if (place.lgbtOwned) { lgbtOwned = '/img/check_false.png'; }
-	if (place.advertises) { advertises = '/img/check_false.png'; }
+	if (place.lgbtOwned) { lgbtOwned = '/img/check_true.png'; }
+	if (place.advertises) { advertises = '/img/check_true.png'; }
 
 	// Set rating image according to friendliness
 	if (place.reviews.length === 0) { friendliness = 0; }
@@ -127,8 +146,12 @@ function updateInfoWindow(place) {
         "<table>" +
         "<tr><td width=200>Gender Neutral Bathrooms:</td><td><img src='" + genNeutBath + "'></td></tr>" +
         "<tr><td width=200>LGBT Owned:</td><td><img src='" + lgbtOwned + "'></td></tr>" +
-        "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table><br>" +
-        "<center><button class='btn btn-default add-review'>Write a review</button></center>";
+        "<tr><td width=200>Advertises as LGBT Friendly:</td><td><img src='" + advertises + "'></td></tr></table><br>";
+
+    // If user hasn't review yet, add a review button
+    if(hasUserReviewed(place) === false) {
+		content += "<center><button class='btn btn-default add-review'>Write a review</button></center>";
+    }
 
     return content;
 }
@@ -325,23 +348,17 @@ function populateReviewList(placeName) {
 
 			    $outerDiv.append(innerDiv);
 
-			    let user;
-			    $.get({
-			    	url: "/user",
-			    	success: function(result) {
-			    		user = result;
-			    		if (user && place.reviews[index].author === user) {
-			    			innerDiv.html(innerDiv.html() + 
-			    				"<br><button class='btn btn-default edit-review'>Edit</button>" + 
-			    				"<button class='btn btn-danger delete-review'>Delete</button>");
-					    	thisUserReviewList.append($outerDiv);
-					    	$('#this-user-reviews').removeClass('hidden');
-					    } else {
-					    	reviewList.append($outerDiv);
-					    	$('#reviews').removeClass('hidden');
-					    }
-			    	},
-			    });
+
+	    		if (username && place.reviews[index].author === username) {
+	    			innerDiv.html(innerDiv.html() + 
+	    				"<br><button class='btn btn-default edit-review'>Edit</button>" + 
+	    				"<button class='btn btn-danger delete-review'>Delete</button>");
+			    	thisUserReviewList.append($outerDiv);
+			    	$('#this-user-reviews').removeClass('hidden');
+			    } else {
+			    	reviewList.append($outerDiv);
+			    	$('#reviews').removeClass('hidden');
+			    }
 		  	});
 		}
 	});
