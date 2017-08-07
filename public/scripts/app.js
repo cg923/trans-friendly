@@ -21,8 +21,7 @@ $(document).ready(function() {
 			$.ajax({
 				method: "GET",
 				url: "/api/google/location?address=" + $('#location-box').val(),
-				success: function(result, err) {
-					if (err) console.log(err);
+				success: function(result) {
 					console.log(result);
 					populateMap($('#search-box').val(), result);
 				}
