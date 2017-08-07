@@ -355,7 +355,7 @@ function clearReviewModal() {
 }
 
 function populateReviewList(placeName) {
-	//console.log(placeName);
+	console.log(placeName);
 
 	// Clear existing reviews.
 	var reviewList = $('#review-list');
