@@ -17,12 +17,20 @@ These ratings will pop up right inside Google Maps.  Additionally, more descript
 users more information, such as "They have gender-neutral bathrooms!" or "the owner called me a queer!"</p>
 
 <h2>Technology</h2>
-<p>Trans Friendly will utilize the Google Maps and Google Places APIs.  Google Maps allows Trans Friendly to display a searchable,
+<p>Trans Friendly utilizes the Google Maps, Google Places, and Google Geocoding APIs.  Google Maps allows Trans Friendly to display a searchable,
 scalable, movable map for users to manipulate.  The map will be populated by Google Places, and expanded upon by our own database
 (currently a Mongo database).  Users will sign up and be authenticated, and have the ability to create, edit, and delete reviews.
-In order that anyone may use the site, there will, of course, be no requirement that a user be trans to participate, but all reviews
+In order that anyone may use the site, there will, of course, be no requirement that a user be trans to participate, but in the future all reviews
 will be submitted through a review cycle and be approved as long as they are clearly well-intentioneod for the trans community.</p>
 
 <h2>Wire-frames and mockups</h2>
-<img src="/public/img/mockup.png">
+<img src="/public/img/mockup.png"><img src="/public/img/mockup2.png">
 
+<h2>Development</h2>
+The biggest challenge of building Trans Friendly was giving users an effective and easy-to-use method of interacting with the data in our database.  While adding reviews was a relatively simple first step, allowing users to edit their reviews and then to have the page update accordingly was quite difficult.
+
+First, I had to be able to identify what reviews a user had written, as my Place model, not User, keeps track of reviews, so there is no intrinsic link between them in our database.  Once I had determined what reviews a user should be able to modify, I had to transfer that information into a form the user could edit.  Lastly, when the user submits the form, both the database and the User's view needed to be updated.  While the database piece was working quite quickly, edited reviews were suddenly appearing for the wrong locations, or often not at all.
+
+It turned out that a click listener I had added to create Google's "Info Windows" (those little cartoon-like speech bubbles) was forever relying upon its initial search data and making several incorrect assumptions about the order of results that were actually subject to change with every search.
+
+Once it became clear that I needed to destroy and recreate each info window with new information on each click of a Google "Marker," things began to sort themselves out.
