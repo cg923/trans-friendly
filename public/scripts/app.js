@@ -17,7 +17,19 @@ $(document).ready(function() {
 
 	$('#search-form').submit(function(event) {
 		event.preventDefault();
-		populateMap($('#search-box').val(), map.getCenter());
+		if ($('#location-box').val() != "") {
+			$.ajax({
+				method: "GET",
+				url: "/api/google/location?address=" + $('#location-box').val(),
+				success: function(result, err) {
+					if (err) console.log(err);
+					console.log(result);
+					populateMap($('#search-box').val(), result);
+				}
+			});
+		} else {
+			populateMap($('#search-box').val(), "NO_LOCATION_SPECIFIED");
+		}
 	});
 
 	// Submit review.
@@ -386,20 +398,34 @@ function calculateSearchRadius() {
 } 
 
 function populateMap(searchTerm, location) {
+	console.log(location);
   
-    var radius = calculateSearchRadius();
+    let radius = calculateSearchRadius();
+
+    let data = {
+    	search: searchTerm,
+    	radius: radius
+    };
+
+    if (location == "NO_LOCATION_SPECIFIED") {
+    	data.location = {
+    		lat: map.getCenter().lat(),
+    		lng: map.getCenter().lng()
+    	};
+    } else {
+    	console.log(location);
+    	data.location = {
+    		lat: location.lat,
+    		lng: location.lng
+    	};
+    }
+
+    console.log(data);
 
     $.ajax({
 	    url: '/api/google',
 	    method: "POST",
-	    data: { 
-	        search: searchTerm, 
-	        location: {
-	        	lat: location.lat(),
-	        	lng: location.lng()
-	        },
-	      	radius: radius
-    	},
+	    data: data,
 	    success: function(results) {
 	      
 	        // Remove active markers from the map.

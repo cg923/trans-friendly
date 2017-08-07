@@ -11,7 +11,7 @@ function getPlaceFromGoogle(req, res, next) {
 				'&keyword=' + req.body.search + 
 				'&location=' + req.body.location.lat + ',' + req.body.location.lng + 
 				'&radius=' + req.body.radius + 
-				'&key=' + env.key;
+				'&key=' + env.placeskey;
 
 	// Call Google Places API
 	request(url, function(error, response, body) {
@@ -20,6 +20,19 @@ function getPlaceFromGoogle(req, res, next) {
 
 		// Send results!
 		res.json(body.results);
+	});
+}
+
+// POST /api/google/location
+function getLocationByAddressFromGoogle(req, res, next) {
+	// construct URL to grab geocoded location info
+	var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + req.query.address +
+				'&key=' + env.geokey;
+	request(url, function(error, response, body) {
+		if (error) throw error;
+		if (typeof(body) === 'string') body = JSON.parse(body);
+		console.log(body.results[0].geometry.location);
+		res.json(body.results[0].geometry.location);
 	});
 }
 
@@ -203,14 +216,15 @@ function removeReview(req, res) {
 }
 
 module.exports = {
-	getPlaceFromGoogle 		: 	getPlaceFromGoogle,
-	getAllPlacesFromDb 		: 	getAllPlacesFromDb,
-	getPlaceFromDb 	   		: 	getPlaceFromDb,
-	searchForPlaceInDb      :   searchForPlaceInDb,
-	createOrGetPlaceFromDb 	: 	createOrGetPlaceFromDb,
-	removePlaceFromDb		:   removePlaceFromDb,
-	addReview				: 	addReview,
-	getReview				:   getReview,
-	updateReview			:   updateReview,
-	removeReview			:   removeReview
+	getPlaceFromGoogle 				: 	getPlaceFromGoogle,
+	getLocationByAddressFromGoogle 	: 	getLocationByAddressFromGoogle,
+	getAllPlacesFromDb 				: 	getAllPlacesFromDb,
+	getPlaceFromDb 	   				: 	getPlaceFromDb,
+	searchForPlaceInDb      		:   searchForPlaceInDb,
+	createOrGetPlaceFromDb 			: 	createOrGetPlaceFromDb,
+	removePlaceFromDb				:   removePlaceFromDb,
+	addReview						: 	addReview,
+	getReview						:   getReview,
+	updateReview					:   updateReview,
+	removeReview					:   removeReview
 };
