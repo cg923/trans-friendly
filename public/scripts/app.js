@@ -106,18 +106,51 @@ $(document).ready(function() {
 });
 
 function generateFriendlinessImage(friendliness) {
-	switch (friendliness) {
+	// TO DO - uggggg
+	switch (true) {
 	case 0:
 		return "No ratings";
-    case 1:
+	case (friendliness > 0 && friendliness <= 25):
+		return "<img src='img/0star.png'>";
+    case (friendliness > 25 && friendliness <= 50):
+    	return "<img src='img/point25star.png'>";
+    case (friendliness > 50 && friendliness <= 75):
+    	return "<img src='img/point5star.png'>";
+    case (friendliness > 75 && friendliness <= 100):
+    	return "<img src='img/point75star.png'>";	
+    case (friendliness > 100 && friendliness <= 125):
         return "<img src='img/1star.png'>";
-    case 2:
+    case (friendliness > 125 && friendliness <= 150):
+    	return "<img src='img/1point25star.png'>";
+    case (friendliness > 150 && friendliness <= 175):
+    	return "<img src='img/1point5star.png'>";
+    case (friendliness > 175 && friendliness <= 200):
+    	return "<img src='img/1point75star.png'>";
+    case (friendliness > 200 && friendliness <= 225):
         return "<img src='img/2star.png'>";
-    case 3:
+    case (friendliness > 225 && friendliness <= 250):
+    	return "<img src='img/2point25star.png'>";
+    case (friendliness > 250 && friendliness <= 275):
+    	return "<img src='img/2point5star.png'>";
+    case (friendliness > 275 && friendliness <= 300):
+    	return "<img src='img/2point75star.png'>";
+    case (friendliness > 300 && friendliness <= 325):
         return "<img src='img/3star.png'>";
-    case 4:
+    case (friendliness > 325 && friendliness <= 350):
+    	return "<img src='img/3point25star.png'>";
+    case (friendliness > 350 && friendliness <= 375):
+    	return "<img src='img/3point5star.png'>";
+    case (friendliness > 375 && friendliness <= 400):
+    	return "<img src='img/3point75star.png'>";
+    case (friendliness > 400 && friendliness <= 425):
         return "<img src='img/4star.png'>";
-    case 5:
+    case (friendliness > 425 && friendliness <= 450):
+    	return "<img src='img/4point25star.png'>";
+    case (friendliness > 450 && friendliness <= 475):
+    	return "<img src='img/4point5star.png'>";
+    case (friendliness > 475 && friendliness <= 500):
+    	return "<img src='img/4point75star.png'>";
+    case 500:
         return "<img src='img/5star.png'>";
     default:
         throw console.log('invalid friendliness rating: ' + friendliness);
@@ -147,7 +180,7 @@ function updateInfoWindow(place) {
 
 	// Set rating image according to friendliness
 	if (place.reviews.length === 0) { friendliness = 0; }
-	else { friendliness = Math.floor(place.friendliness / place.reviews.length); }
+	else { friendliness = Math.floor(place.friendliness * 100 / place.reviews.length);}
 	friendImgSrc = generateFriendlinessImage(friendliness);
 
 	let content= "<b>" + place.name + "</b><br>" +
@@ -346,7 +379,7 @@ function populateReviewList(placeName) {
 			    var innerDiv = $("<div></div>");
 			    innerDiv.addClass("panel-body");
 			    innerDiv.html("<div><div><h4>" + place.reviews[index].author + ":</h4></div></div>" +
-			    	"<div><div>" + generateFriendlinessImage(place.reviews[index].friendliness) + "</div>" +
+			    	"<div><div>" + generateFriendlinessImage(100 * place.reviews[index].friendliness) + "</div>" +
 			    	"<div><p class='review-description'>\"" + place.reviews[index].text + "\"</p></div></div>");
 
 			    innerDiv.addClass('blue');
