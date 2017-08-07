@@ -31,7 +31,6 @@ function getLocationByAddressFromGoogle(req, res, next) {
 	request(url, function(error, response, body) {
 		if (error) throw error;
 		if (typeof(body) === 'string') body = JSON.parse(body);
-		console.log(body.results[0].geometry.location);
 		res.json(body.results[0].geometry.location);
 	});
 }

@@ -398,7 +398,6 @@ function calculateSearchRadius() {
 } 
 
 function populateMap(searchTerm, location) {
-	console.log(location);
   
     let radius = calculateSearchRadius();
 
@@ -413,14 +412,11 @@ function populateMap(searchTerm, location) {
     		lng: map.getCenter().lng()
     	};
     } else {
-    	console.log(location);
     	data.location = {
     		lat: location.lat,
     		lng: location.lng
     	};
     }
-
-    console.log(data);
 
     $.ajax({
 	    url: '/api/google',
@@ -433,6 +429,10 @@ function populateMap(searchTerm, location) {
 	        	element.setMap(null);
 	        });
 	        markers = [];
+
+	        // Recenter the map
+	        map.setCenter({lat: results[0].geometry.location.lat,
+	        			   lng: results[0].geometry.location.lng});
 
 	        // Create markers for new results.
 	        results.forEach(function(element) {
