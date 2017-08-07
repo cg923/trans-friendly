@@ -108,7 +108,7 @@ $(document).ready(function() {
 function generateFriendlinessImage(friendliness) {
 	// TO DO - uggggg
 	switch (true) {
-	case 0:
+	case (friendliness === 0):
 		return "No ratings";
 	case (friendliness >= 0 && friendliness < 25):
 		return "<img src='img/0star.png'>";
