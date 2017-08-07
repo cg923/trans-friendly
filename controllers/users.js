@@ -27,7 +27,7 @@ function getLogin(request, response) {
 	response.render('login.ejs', { message: request.flash('loginMessage') });
 }
 
-// POIST /login
+// POST /login
 function postLogin(request, response, next) {
 	var loginProperty = passport.authenticate('local-login', {
 		successRedirect: '/',

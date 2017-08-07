@@ -5,6 +5,8 @@ const db 			= require('../models');
 const passport		= require('passport');
 
 // POST /api/google
+// This function calls the Google Places API and asks for places
+// based on a latitute and longitude combo.
 function getPlaceFromGoogle(req, res, next) {
 	// construct URL based on user input.
 	var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + 
@@ -24,6 +26,8 @@ function getPlaceFromGoogle(req, res, next) {
 }
 
 // POST /api/google/location
+// Converts user-entered address or location to latitude and longitude
+// using the Google Geocode API.
 function getLocationByAddressFromGoogle(req, res, next) {
 	// construct URL to grab geocoded location info
 	var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + req.query.address +
@@ -36,6 +40,7 @@ function getLocationByAddressFromGoogle(req, res, next) {
 }
 
 // GET /api/places/
+// INDEX
 function getAllPlacesFromDb(req, res) {
 	db.Place.Place.find({}, function(err, places) {
 		if (err) throw err;
@@ -44,6 +49,7 @@ function getAllPlacesFromDb(req, res) {
 }
 
 // POST /api/places/
+// CREATE
 function createOrGetPlaceFromDb(req, res, next) {
 	if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);
 	db.Place.Place.findOne({ 'name': req.body.search, 
@@ -80,7 +86,8 @@ function createOrGetPlaceFromDb(req, res, next) {
 	});
 }
 
-// SEARCH /api/places/search
+// GET /api/places/search
+// SEARCH
 function searchForPlaceInDb(req, res) {
 	db.Place.Place.findOne({name: req.query.name}, function(err, place) {
 		if (err) throw err;
@@ -89,6 +96,7 @@ function searchForPlaceInDb(req, res) {
 }
 
 // GET /api/places/:id
+// SHOW
 function getPlaceFromDb(req, res) {
 	db.Place.Place.find({_id: req.params.id}, function(err, place) {
 		if (err) throw err;
@@ -97,6 +105,7 @@ function getPlaceFromDb(req, res) {
 }
 
 // DELETE /api/places/:id
+// BALEET IT
 function removePlaceFromDb(req, res) {
 	db.Place.Place.findOneAndRemove({_id: req.params.id}, function(err, place) {
 		if (err) throw err;
@@ -105,6 +114,7 @@ function removePlaceFromDb(req, res) {
 }
 
 // PUT /api/places/:id
+// UPDATE
 function addReview(req, res, next) {
 	db.Place.Place.findOne({_id: req.params.id}, function(err, place) {
 		if(typeof(req.body) === 'string') req.body = JSON.parse(req.body);
@@ -129,7 +139,6 @@ function addReview(req, res, next) {
 			place.advertises = req.body.advertises; 
 		}
 
-		// Calculate new friendliness score.
 		place.friendliness = parseInt(place.friendliness) + parseInt(req.body.friendliness);
 
 		place.save(function(err, place) {
@@ -139,6 +148,7 @@ function addReview(req, res, next) {
 }
 
 // GET /api/places/:place_id/reviews/:review_id
+// SHOW - review
 function getReview(req, res) {
 	db.Place.Place.findOne({_id: req.params.place_id}, function(err, place) {
 		if (err) throw err;
@@ -151,6 +161,7 @@ function getReview(req, res) {
 }
 
 // PUT /api/places/:place_id/review/:review_id
+// UPDATE - review
 function updateReview(req, res) {
 
 	db.Place.Place.findOne({_id: req.params.place_id}, function(err, place) {
@@ -191,6 +202,7 @@ function updateReview(req, res) {
 }
 
 // DELETE /api/places/:place_id/reviews/:review_id
+// DELETE - review
 function removeReview(req, res) {
 	db.Place.Place.findOne({_id: req.params.place_id}, function(err, place) {
 		if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);

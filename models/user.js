@@ -6,6 +6,8 @@ var User = mongoose.Schema({
 		email: String,
 		password: String
 	},
+	// TO DO - This currently does nothing.  In the future
+	// it would be good to have User keep track of their reviews.
 	reviews: [{type: mongoose.Schema.Types.ObjectId, ref: 'Review'}]
 
 });

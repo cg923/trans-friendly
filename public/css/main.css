@@ -8,15 +8,6 @@ nav {
 	background: #74CDF4;
 }
 
-/* Page structure */
-.search {
-	min-height: 60px;
-}
-
-select {
-	min-height: 40px;
-}
-
 /* Google Maps */
 #map {
 	height: 460px;
@@ -24,12 +15,26 @@ select {
 	border-radius: 10px;
 }
 
-/* Pure style, baby */
+/* Page structure */
 .menu {
 	position: relative;
 	bottom: -23px;
 }
 
+.search {
+	min-height: 60px;
+}
+
+footer {
+	color: white;
+	min-height: 60px;
+}
+
+select {
+	min-height: 40px;
+}
+
+/* Pure style, baby */
 .logo {
 	display: inline;
 	margin-left: 0px;
@@ -42,17 +47,6 @@ select {
 	font-size: 18px;
 	color: white;
 	margin-left: 10px;
-}
-
-a, a:hover, a:link, a:focus {
-	color: white;
-	text-decoration: none
-}
-
-a:hover {
-	position: relative;
-	top: -2px;
-	left: -2px;
 }
 
 .user-menu {
@@ -85,16 +79,15 @@ a:hover {
 	bottom: -24px;
 }
 
+/* I know this is bad practice and css should be
+"functional," not stylistic but this just made
+my life so much easier */
 .pink {
 	background: #ebadb9;
 }
 
 .blue {
 	background: #74cdf4;
-}
-
-#map-row {
-	padding-bottom: 30px;
 }
 
 .review-section-title {
@@ -115,15 +108,32 @@ a:hover {
 	font-style: italic;
 }
 
-ul {
-	list-style: none;
+#map-row {
+	padding-bottom: 30px;
+}
+
+a, a:hover, a:link, a:focus {
+	color: white;
+	text-decoration: none
+}
+
+a:hover {
+	color: #ddd;
+}
+
+.logo:hover {
+	background-image: -webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
+  	background-image: gradient(linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );
+  	color:transparent;
+  	-webkit-background-clip: text;
+  	background-clip: text;
 }
 
 h3 {
 	color: white;
 }
 
-footer {
-	color: white;
-	min-height: 60px;
+ul {
+	list-style: none;
 }
+
