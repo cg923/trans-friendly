@@ -150,7 +150,7 @@ function generateFriendlinessImage(friendliness) {
     	return "<img src='img/4point5star.png'>";
     case (friendliness >= 475 && friendliness < 500):
     	return "<img src='img/4point75star.png'>";
-    case 500:
+    case (friendliness === 500):
         return "<img src='img/5star.png'>";
     default:
         throw console.log('invalid friendliness rating: ' + friendliness);
