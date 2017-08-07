@@ -215,11 +215,6 @@ function removeReview(req, res) {
 }
 
 module.exports = {
-	movieSearch: movieSearch,
-	movieDelete: movieDelete
-};
-
-module.exports = {
 	getPlaceFromGoogle 				: 	getPlaceFromGoogle,
 	getLocationByAddressFromGoogle 	: 	getLocationByAddressFromGoogle,
 	getAllPlacesFromDb 				: 	getAllPlacesFromDb,

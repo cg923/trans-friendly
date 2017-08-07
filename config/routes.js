@@ -32,7 +32,7 @@ router.route('/login')
 router.route('/logout')
 	.get(usersController.getLogout);
 
-// PLACES
+// GOOGLE APIS
 // get/create
 router.route('/api/google')
 	// This is POST because we need to pass data.
@@ -42,6 +42,7 @@ router.route('/api/google')
 router.route('/api/google/location')
 	.get(placesController.getLocationByAddressFromGoogle);
 
+// PLACES
 // index
 router.route('/api/places/')
 	.get(placesController.getAllPlacesFromDb);

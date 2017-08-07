@@ -19,7 +19,7 @@ select {
 
 /* Google Maps */
 #map {
-	height: 500px;
+	height: 460px;
 	width: 100%;
 	border-radius: 10px;
 }
