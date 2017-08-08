@@ -95,6 +95,15 @@ function searchForPlaceInDb(req, res) {
 	});
 }
 
+// POST /api/places/customsearch
+function customSearchForPlaceInDb(req, res) {
+	if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);
+	db.Place.Place.findOne({name: req.body.name}, function(err, place) {
+		if (err) throw err;
+		res.json(place);
+	});
+}
+
 // GET /api/places/:id
 // SHOW
 function getPlaceFromDb(req, res) {
@@ -232,6 +241,7 @@ module.exports = {
 	getAllPlacesFromDb 				: 	getAllPlacesFromDb,
 	getPlaceFromDb 	   				: 	getPlaceFromDb,
 	searchForPlaceInDb      		:   searchForPlaceInDb,
+	customSearchForPlaceInDb		:   customSearchForPlaceInDb,
 	createOrGetPlaceFromDb 			: 	createOrGetPlaceFromDb,
 	removePlaceFromDb				:   removePlaceFromDb,
 	addReview						: 	addReview,

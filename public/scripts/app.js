@@ -5,6 +5,7 @@ let openInfoWindows;
 let markers = [];
 let currentPlaceId = "";
 let username;
+let disallowedCharacters = [';', '/', '?', ':', '@', '&', '=', '+', '$', ',', '-'];
 
 $(document).ready(function() {
 	$.ajax({
@@ -17,7 +18,7 @@ $(document).ready(function() {
 
 	$('#search-form').submit(function(event) {
 		event.preventDefault();
-		if ($('#location-box').val() != "") {
+		if ($('#location-box').val() !== "") {
 			$.ajax({
 				method: "GET",
 				url: "/api/google/location?address=" + $('#location-box').val(),
@@ -355,8 +356,22 @@ function clearReviewModal() {
 }
 
 function populateReviewList(placeName) {
-	console.log(placeName);
 
+	/*
+	let placeArray = placeName.split(' ');
+	let newPlaceName = "";
+	for(let i = 0; i < placeArray.length; i++) {
+		if (placeArray[i] === '&') {
+			newPlaceName += '%26';
+		} else if (i === placeArray.length - 1) {
+			newPlaceName += placeArray[i];
+		} else {
+			newPlaceName += placeArray[i] + " ";
+		}
+	}
+
+	console.log(newPlaceName);
+	*/
 	// Clear existing reviews.
 	var reviewList = $('#review-list');
 	$('#this-user-reviews').addClass('hidden');
@@ -366,9 +381,13 @@ function populateReviewList(placeName) {
 	thisUserReviewList.html('');
 
 	$.ajax({
-		method: 'GET',
-		url: '/api/places/search?name=' + placeName,
+		method: 'POST',
+		url: '/api/places/customsearch',
+		data: {
+			name: placeName
+		},
 		success: function(place) {
+			console.log(place);
 			// Create bootstrap panel to represent review
 			place.reviews.forEach(function(element, index) {
 			    var $outerDiv = $("<li class='review'></li>");

@@ -55,6 +55,10 @@ router.route('/api/places/')
 router.route('/api/places/search')
 	.get(placesController.searchForPlaceInDb);
 
+// custom search (because places often have names with URI invalid characters)
+router.route('/api/places/customsearch')
+	.post(placesController.customSearchForPlaceInDb);
+
 // show
 router.route('/api/places/:id')
 	.get(placesController.getPlaceFromDb);
