@@ -4,6 +4,8 @@
 businesses of all kinds all over the world.
 Instead of rating based on service or value, users rate them based on how "trans-friendly" they are.</p>
 
+<p>You can try Trans Friendly <a href="https://guarded-refuge-56591.herokuapp.com/">here!</p>
+
 <h2>Background</h2>
 <p>Over the past two years I have moved clear across the country, twice! In my travels, one of the biggest challenges I encountered
 was finding a trans-friendly doctor.  In order to find one, I had to contact the local LGBT center, a luxury of urban life, and even then,
