@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Trans Friendly</title>
 		<link rel="stylesheet" href="./css/bootstrap.min.css">
 		<link rel="stylesheet" href="./css/main.css">
@@ -9,16 +10,21 @@
 	<body>
 		<nav>
 			<div class="container menu">
-				<a href="/" class="logo">trans friendly</a>
-				<ul class="user-menu">
-					<% if (currentUser) { %>
-						<li class="menu-item"><a href="/logout">Logout <%= currentUser.local.email %></a></li>
-					<% } else { %>
-						<li class="menu-item"><a href="/login">Login</a></li>
-						<li class="menu-item"><a href="/signup">Signup</a></li>
-					<% } %>
-				</ul>
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-md-6 col-lg-4">
+						<a href="/" class="logo">trans friendly</a>
+					</div>
+					<div class="col-xs-12 col-sm-8 col-md-6 col-lg-8">
+						<ul class="user-menu">
+							<% if (currentUser) { %>
+								<li class="menu-item"><a href="/logout">Logout <%= currentUser.local.email %></a></li>
+							<% } else { %>
+								<li class="menu-item"><a href="/login">Login</a></li>
+								<li class="menu-item"><a href="/signup">Signup</a></li>
+							<% } %>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</nav>
-
 		<main>
