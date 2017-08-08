@@ -4,6 +4,12 @@
 businesses of all kinds all over the world.
 Instead of rating based on service or value, users rate them based on how "trans-friendly" they are.</p>
 
+<h3>Heroku Deployment</h3>
+<p>You can try Trans Friendly <a href="https://guarded-refuge-56591.herokuapp.com/">here!</p>
+  
+<h3>Trello User Stories</h3>
+<p><a href="https://trello.com/b/Pew8hTip/trans-friendly">Trello</a>
+
 <h2>Background</h2>
 <p>Over the past two years I have moved clear across the country, twice! In my travels, one of the biggest challenges I encountered
 was finding a trans-friendly doctor.  In order to find one, I had to contact the local LGBT center, a luxury of urban life, and even then,
@@ -22,6 +28,11 @@ scalable, movable map for users to manipulate.  The map will be populated by Goo
 (currently a Mongo database).  Users will sign up and be authenticated, and have the ability to create, edit, and delete reviews.
 In order that anyone may use the site, there will, of course, be no requirement that a user be trans to participate, but in the future all reviews
 will be submitted through a review cycle and be approved as long as they are clearly well-intentioneod for the trans community.</p>
+
+<h3>APIs used</h3>
+<a href="https://developers.google.com/places/documentation/">Google Places</a><br>
+<a href="https://developers.google.com/maps/documentation/">Google Maps</a><br>
+<a href="https://developers.google.com/maps/documentation/geocoding/intro">Google Geocoding</a>
 
 <h2>Wire-frames and mockups</h2>
 <img src="/public/img/mockup.png"><img src="/public/img/mockup2.png">
