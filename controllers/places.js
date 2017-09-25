@@ -4,10 +4,15 @@ const env 			= require('../env.js');
 const db 			= require('../models');
 const passport		= require('passport');
 
+// ------------------------------------ //
+// -------------- GOOGLE -------------- //
+// ------------------------------------ //
+
 // POST /api/google
-// This function calls the Google Places API and asks for places
-// based on a latitute and longitude combo.
+/* 	This function calls the Google Places API and asks for places
+   	based on a latitute and longitude combo. */
 function getPlaceFromGoogle(req, res, next) {
+
 	// construct URL based on user input.
 	var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + 
 				'&keyword=' + req.body.search + 
@@ -26,9 +31,12 @@ function getPlaceFromGoogle(req, res, next) {
 }
 
 // POST /api/google/location
-// Converts user-entered address or location to latitude and longitude
-// using the Google Geocode API.
+/* 	Converts user-entered address or location to latitude and longitude
+	using the Google Geocode API. 
+	We use the word Location rather than Place to indicate that we are
+	not returning general information, only Lat & Lng */
 function getLocationByAddressFromGoogle(req, res, next) {
+
 	// construct URL to grab geocoded location info
 	var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + req.query.address +
 				'&key=' + env.geokey;
@@ -38,6 +46,10 @@ function getLocationByAddressFromGoogle(req, res, next) {
 		res.json(body.results[0].geometry.location);
 	});
 }
+
+// ------------------------------------ //
+// -------------- PLACES -------------- //
+// ------------------------------------ //
 
 // GET /api/places/
 // INDEX
@@ -96,6 +108,13 @@ function searchForPlaceInDb(req, res) {
 }
 
 // POST /api/places/customsearch
+/*	TODO: This should really be combined with the above function, with
+	URI validation on the back end instead of the front end.
+
+	For now:
+	customsearch is different than search because some Google Place names
+	use illegal URI characters in their names.  We check for this on
+	the front end and act accordingly */
 function customSearchForPlaceInDb(req, res) {
 	if (typeof(req.body) === 'string') req.body = JSON.parse(req.body);
 	db.Place.Place.findOne({name: req.body.name}, function(err, place) {
@@ -114,7 +133,6 @@ function getPlaceFromDb(req, res) {
 }
 
 // DELETE /api/places/:id
-// BALEET IT
 function removePlaceFromDb(req, res) {
 	db.Place.Place.findOneAndRemove({_id: req.params.id}, function(err, place) {
 		if (err) throw err;

@@ -1,6 +1,9 @@
 var LocalStrategy	= require('passport-local').Strategy;
 var User			= require('../models/index.js').User;
 
+/* The strategies in this function deal with searching through
+	our DB for existing users, creating new users, etc., */
+
 module.exports = function(passport) {
 
 	passport.serializeUser(function(user, callback) {
@@ -18,17 +21,15 @@ module.exports = function(passport) {
 		passwordField: 'password',
 		passReqToCallback: true
 	}, function(req, email, password, callback) {
+
 		// Find a user with this email
 		User.findOne({ 'local.email' : email }, function(err, user) {
-			console.log('hi');
 			if(err) return callback(err);
 
 			// User found
 			if (user) {
-				console.log('user found');
 				return callback(null, false, req.flash('signupMessage', "This e-mail is already in use."));
 			} else {
-				console.log('user didnt exist');
 				// No user yet registered with this e-mail
 				var newUser = new User();
 				newUser.local.email = email;
@@ -47,22 +48,20 @@ module.exports = function(passport) {
 		passwordField: 'password',
 		passReqToCallback: true
 	}, function(req, email, password, callback) {
+
 		// Check to see if user exists.
 		User.findOne({'local.email': email }, function(err, user) {
 			if(err) { return callback(err); }
 
 			// No user was found
 			if (!user) {
-				console.log('username bad');
 				return callback(null, false, req.flash('loginMessage', "Login information is incorrect."));
 			}
 
 			// Wrong password
 			if (!user.validPassword(password)) {
-				console.log('password bad');
 				return callback(null, false, req.flash('loginMessage', "Login information is incorrect."));
 			}
-			console.log('okay');
 
 			// All user info is correct.
 			return callback(null, user);

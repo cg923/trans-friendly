@@ -7,22 +7,36 @@ const usersController	= require('../controllers/users');
 const placesController	= require('../controllers/places');
 const staticsController	= require('../controllers/statics');
 
+// ------------------------------------ //
+// ---------- AUTHENTICATION ---------- //
+// ------------------------------------ //
+
+/* All controllers which require a user to be logged in should
+   be routed through this function. */
 function authenticatedUser(req, res, next) {
 	if(req.isAuthenticated()) return next();
 
 	res.redirect('/');
 }
 
-// STATICS
+// ------------------------------------ //
+// -------------- Statics ------------- //
+// ------------------------------------ //
+
 router.route('/')
 	.get(staticsController.home);
 
-// USERS
+// ------------------------------------ //
+// -------------- Users --------------- //
+// ------------------------------------ //
+
 router.route('/user')
 	.get(usersController.getUser);
 	
 router.route('/signup')
+	// GET signup directs to sign up page
 	.get(usersController.getSignup)
+	// while POST sends sign up info to backend.
 	.post(usersController.postSignup);
 
 router.route('/login')
@@ -32,55 +46,68 @@ router.route('/login')
 router.route('/logout')
 	.get(usersController.getLogout);
 
-// GOOGLE APIS
-// get/create
+// ------------------------------------ //
+// ----------- GOOGLE APIS ------------ //
+// ------------------------------------ //
+
+/* In these two routes no data is saved to our DB.
+   We are making API calls from the back end
+   and then sending info back to the front end
+   in order to hide our API keys */
+   
 router.route('/api/google')
 	// This is POST because we need to pass data.
 	.post(placesController.getPlaceFromGoogle);
 
-// get/create by location
 router.route('/api/google/location')
 	.get(placesController.getLocationByAddressFromGoogle);
 
-// PLACES
-// index
+// ------------------------------------ //
+// -------------- PLACES -------------- //
+// ------------------------------------ //
+
+// INDEX
 router.route('/api/places/')
 	.get(placesController.getAllPlacesFromDb);
 
-// create
+// CREATE
 router.route('/api/places/')
 	.post(placesController.createOrGetPlaceFromDb);
 
-// search
+// SEARCH
 router.route('/api/places/search')
 	.get(placesController.searchForPlaceInDb);
 
-// custom search (because places often have names with URI invalid characters)
+/*  custom SEARCH (because Google Places data
+	can have names with URI invalid characters) */
 router.route('/api/places/customsearch')
 	.post(placesController.customSearchForPlaceInDb);
 
-// show
+// SHOW
 router.route('/api/places/:id')
 	.get(placesController.getPlaceFromDb);
 
-// delete
+// DELETE
 router.route('/api/places/:id')
 	.delete(authenticatedUser, placesController.removePlaceFromDb);
 
-// update
+// UPDATE
 router.route('/api/places/:id')
 	.put(authenticatedUser, placesController.addReview);
 
-// REVIEWS
-// show
+// ------------------------------------ //
+// ------------- REVIEWS -------------- //
+// ------------------------------------ //
+
+// SHOW
 router.route('/api/places/:place_id/reviews/:review_id')
 	.get(placesController.getReview);
 
-// update
+// UPDATE
 router.route('/api/places/:place_id/reviews/:review_id')
 	.put(authenticatedUser, placesController.updateReview);
 
-// delete
+// DELETE
 router.route('/api/places/:place_id/reviews/:review_id')
 	.delete(authenticatedUser, placesController.removeReview);
 

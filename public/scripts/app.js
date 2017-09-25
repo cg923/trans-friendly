@@ -23,7 +23,6 @@ $(document).ready(function() {
 				method: "GET",
 				url: "/api/google/location?address=" + $('#location-box').val(),
 				success: function(result) {
-					console.log(result);
 					populateMap($('#search-box').val(), result);
 				}
 			});
@@ -35,7 +34,8 @@ $(document).ready(function() {
 	// Submit review.
 	$('#add-review-form').submit(function(event) {
 		event.preventDefault();
-		// Form is not filled out completely.
+
+		// If form is not filled out completely...
 		if ($('#review-text').val() === "" ||
 			$('input[name=gendNeutBath]:checked').length === 0 ||
 			$('input[name=lgbtOwned]:checked').length === 0 ||
@@ -55,11 +55,13 @@ $(document).ready(function() {
 
 	// Edit review.
 	$('.review-list').on('click', '.edit-review', function(e) {
+
 		// Give modal data for saving.
 		clearReviewModal();
 		$('#review-modal').data('place-id', $(this).parent().parent().data('place-id'));
 		$('#review-modal').data('review-id', $(this).parent().parent().data('review-id'));
 		$('#review-modal').data('review-edit', true);
+
 		// Fill in modal with existing review data.
 		$.ajax({
 			method: "GET",
@@ -72,6 +74,7 @@ $(document).ready(function() {
 						review = element;
 					}
 				});
+
 				// Fill in form with existing review data.
 				$('#review-text').val(review.text);
 				if (review.genderNeutralBathrooms) { $('#gendNeutBathYes').prop('checked', true);} 
@@ -107,7 +110,7 @@ $(document).ready(function() {
 });
 
 function generateFriendlinessImage(friendliness) {
-	// TO DO - uggggg
+	// TO DO - this is surely not the way to handle this.
 	switch (true) {
 	case (friendliness === 0):
 		return "No ratings";
@@ -202,6 +205,7 @@ function updateInfoWindow(place) {
 }
 
 function createInfoWindow(place, callback) {
+
 	// Determine a location for our Google Place
 	let address;
 	if (place.formatted_address) { address = place.formatted_address; }
@@ -225,6 +229,7 @@ function createInfoWindow(place, callback) {
 				content: updateInfoWindow(result)
 			});
 
+			// Create this place's info window.
       		google.maps.event.addListener(infoWindow, 'domready', function() {
       			$('.add-review').click(function() {
       				clearReviewModal();
@@ -240,6 +245,7 @@ function createInfoWindow(place, callback) {
 }
 
 function closeOpenInfoWindows() {
+
 	// Hide reviews
 	$('#reviews').addClass('hidden');
 
@@ -372,6 +378,7 @@ function populateReviewList(placeName) {
 
 	console.log(newPlaceName);
 	*/
+
 	// Clear existing reviews.
 	var reviewList = $('#review-list');
 	$('#this-user-reviews').addClass('hidden');
@@ -387,7 +394,7 @@ function populateReviewList(placeName) {
 			name: placeName
 		},
 		success: function(place) {
-			console.log(place);
+
 			// Create bootstrap panel to represent review
 			place.reviews.forEach(function(element, index) {
 			    var $outerDiv = $("<li class='review'></li>");
@@ -488,6 +495,7 @@ function populateMap(searchTerm, location) {
 
 	        // Create markers for new results.
 	        results.forEach(function(element) {
+
 	        	// Create corresponding infoWindows (Google's little popup bubbles)
 	        	createInfoWindow(element, function(infoWindow, results) {
 		            var marker = new google.maps.Marker({
@@ -512,6 +520,7 @@ function populateMap(searchTerm, location) {
 
 // Sets up map on the screen.
 function initMap() {
+
 	// FIX ME - can't select map with jQuery because...?
 	map = new google.maps.Map(document.getElementById('map'), {
 	    zoom: 15,
@@ -528,6 +537,7 @@ function initMap() {
           	}
         ]
     };
+    
 	map.setOptions({styles: styles['hide']});
 
 	// Try to get user's location.
